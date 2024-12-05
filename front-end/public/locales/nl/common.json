@@ -1,0 +1,18 @@
+{
+    "home": {
+        "title": "TeamTracker"
+    },
+
+    "login": {
+        "title": "Login",
+        "username": "Gebruikersnaam:",
+        "password": "Wachtwoord:",
+        "submit": "Log in"
+    },
+    
+    "error": {
+        "message": "Er is iets fout gelopen. Probeer opnieuw later.",
+        "nameReq": "Naam is vereist",
+        "pwdReq": "Wachtwoord is vereist"
+    }
+}

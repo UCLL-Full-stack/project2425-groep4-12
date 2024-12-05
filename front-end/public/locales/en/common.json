@@ -1,0 +1,18 @@
+{
+    "home":{
+        "title": "TeamTracker"
+    },
+
+    "login": {
+        "title": "Login",
+        "username": "Username:",
+        "password": "Password:",
+        "submit": "Log in"
+    },
+
+    "error": {
+        "message": "An unknown error has occured. Please try again later.",
+        "nameReq": "Name is required",
+        "pwdReq": "Password is required"
+    }
+}

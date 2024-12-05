@@ -28,8 +28,8 @@ const UserLoginForm: React.FC = () => {
         let count = 0;
         setNameError('');
         setPasswordError('');
-        if(!name || name.trim()==='') { setNameError('Name is required'); count += 1 }
-        if(!password || password.trim()==='') { setPasswordError('Password is required'); count += 1 }
+        if(!name || name.trim()==='') { setNameError(`${t("error.nameReq")}`); count += 1 }
+        if(!password || password.trim()==='') { setPasswordError(`${t("error.pwdReq")}`); count += 1 }
         return count == 0;
     }
 
@@ -74,7 +74,7 @@ const UserLoginForm: React.FC = () => {
                 console.log("error: " + data.message);
             };
         } catch (error) {
-            setStatusMessages([{type: "error", message: "An unknown error has occured. Please try again later."}]);
+            setStatusMessages([{type: "error", message: `${t("error.message")}`}]);
         }
     };
 
@@ -97,7 +97,7 @@ const UserLoginForm: React.FC = () => {
                     </ul>
                 </div>
             )}
-            
+
             <form onSubmit={handleSubmit} className={styles.description_b}>
                 <label
                     htmlFor="nameInput" className={styles.pad}>
