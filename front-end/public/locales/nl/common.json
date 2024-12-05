@@ -20,6 +20,12 @@
         "password": "Wachtwoord:",
         "submit": "Log in"
     },
+
+    "language": {
+        "language": "Taal:",
+        "en": "Engels",
+        "nl": "Nederlands"
+    },
     
     "error": {
         "message": "Er is iets fout gelopen. Probeer opnieuw later.",

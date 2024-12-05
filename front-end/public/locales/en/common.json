@@ -21,6 +21,12 @@
         "submit": "Log in"
     },
 
+    "language": {
+        "language": "Language:",
+        "en": "English",
+        "nl": "Dutch"
+    },
+
     "error": {
         "message": "An unknown error has occured. Please try again later.",
         "nameReq": "Name is required",
