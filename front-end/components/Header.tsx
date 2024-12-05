@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "../styles/home.module.css"
+import { useTranslation } from "next-i18next";
 
 const Header: React.FC = () => {
+
+    const {t} = useTranslation();
 
     const [loggedInUser, setLoggedInUser] = useState<String|null>(null);
     
@@ -19,28 +22,28 @@ const Header: React.FC = () => {
     return (
         <header className={styles.header}>
             <a className={styles.title}>
-                TeamTracker
+                {t("header.title")}
             </a>
 
             <nav className={styles.nav}>
                 <Link href="/" className={styles.card}>
-                    Homepage
+                    {t("header.homepage")}
                 </Link>
                 <Link href="/training" className={styles.card}>
-                    Trainings
+                    {t("header.training")}
                 </Link>
                 <Link href="/team" className={styles.card}>
-                    Teams
+                    {t("header.teams")}
                 </Link>
                 <Link href="/match" className={styles.card}>
-                    Matches
+                    {t("header.matches")}
                 </Link>
 
                 {!loggedInUser && (
                     <Link
                         href="/login"
                         className={styles.card}>
-                        Login
+                        {t("header.login")}
                     </Link>
                 )}
 
@@ -60,11 +63,11 @@ const Header: React.FC = () => {
                             href="#"
                             onClick={handleClick}
                             className={styles.card}
-                        > Logout </a>
+                        > {t("header.logout")} </a>
                         <a
                             href="/user"
                             className={styles.card}
-                        > Profile </a>
+                        > {t("header.profile")} </a>
                     </>
                 )}
 

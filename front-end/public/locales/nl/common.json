@@ -3,6 +3,17 @@
         "title": "TeamTracker"
     },
 
+    "header": {
+        "title": "TeamTracker",
+        "homepage": "Home pagina",
+        "training": "Training",
+        "teams": "Teams",
+        "matches": "Wedstrijden",
+        "login": "Login",
+        "logout": "Log uit",
+        "profile": "Profiel"
+    },
+
     "login": {
         "title": "Login",
         "username": "Gebruikersnaam:",
