@@ -1,6 +1,6 @@
 export type Role = "ADMIN" | "Coach" | "Player" | "Guest"
 
-export type User = {
+export interface User {
     userId?: number;
     username: string;
     password: string;
@@ -29,4 +29,9 @@ export type Match = {
     hall: string;
     square: number;
     players?: Array<User>;
+}
+
+export type StatusMessage = {
+    message: string;
+    type: "error" | "success";
 }

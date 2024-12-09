@@ -1,0 +1,35 @@
+{
+    "home":{
+        "title": "TeamTracker"
+    },
+
+    "header": {
+        "title": "TeamTracker",
+        "homepage": "Homepage",
+        "training": "Training",
+        "teams": "Teams",
+        "matches": "Matches",
+        "login": "Login",
+        "logout": "Logout",
+        "profile": "Profile"
+    },
+
+    "login": {
+        "title": "Login",
+        "username": "Username:",
+        "password": "Password:",
+        "submit": "Log in"
+    },
+
+    "language": {
+        "language": "Language:",
+        "en": "English",
+        "nl": "Dutch"
+    },
+
+    "error": {
+        "message": "An unknown error has occured. Please try again later.",
+        "nameReq": "Name is required",
+        "pwdReq": "Password is required"
+    }
+}
