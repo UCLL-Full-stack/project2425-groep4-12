@@ -85,6 +85,15 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/UserInput'
+ *            examples:
+ *              default:
+ *                summary: A default user example
+ *                value:
+ *                  firstName: "Danny"
+ *                  lastName: "Verstraeten"
+ *                  email: "DannyV@example.com"
+ *                  password: "password"
+ *                  role: "COACH"
  *      responses:
  *         200:
  *            description: The created user object
