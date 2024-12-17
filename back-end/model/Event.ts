@@ -15,7 +15,6 @@ export class Event {
         location: string;
         start: Date;
         end: Date;
-
     }) {
         this.validate(event);
 
@@ -61,14 +60,14 @@ export class Event {
         if (!event.name?.trim()) {
             throw new Error('Name is required');
         }
-        if (!event.description?.trim()) { 
+        if (!event.description?.trim()) {
             throw new Error('Description is required');
         }
         if (!event.location.trim()) {
             throw new Error('Location is required');
         }
     }
-    
+
     equals(event: Event): boolean {
         return (
             this.name === event.getName() &&

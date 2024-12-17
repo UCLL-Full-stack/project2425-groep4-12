@@ -52,11 +52,11 @@ export class Team {
         return this.schedule;
     }
 
-    validate(schedule: {name: string; coach: Coach }) {
-        if (!schedule.name?.trim()) {
+    validate(team: { name: string; coach: Coach }) {
+        if (!team.name?.trim()) {
             throw new Error('Name is required');
         }
-        if (!schedule.coach) {
+        if (!team.coach) {
             throw new Error('Coach is required');
         }
     }
@@ -84,7 +84,6 @@ export class Team {
         players,
         schedule,
     }: TeamPrisma & {
-        event: EventPrisma;
         coach: CoachPrisma & {
             user: UserPrisma;
             schedule: EventPrisma[];
