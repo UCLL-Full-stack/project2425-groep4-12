@@ -1,30 +1,41 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
-async function main() {
+const main = async () => {
   // Empty the database
-  await prisma.match.deleteMany({});
-  await prisma.training.deleteMany({});
   await prisma.team.deleteMany({});
+  await prisma.event.deleteMany({});
+  await prisma.coach.deleteMany({});
+  await prisma.player.deleteMany({});
   await prisma.user.deleteMany({});
 
   // Add new users
   const Chris = await prisma.user.create({
-      data: {
-        firstName: 'Coach',
-        lastName: 'Chris',
-        password: 'coachpassword',
-        role: 'COACH',
+    data: {
+      firstName: 'Coach',
+      lastName: 'Chris',
+      email: 'chris@example.com',
+      password: await bcrypt.hash('coachpassword', 12),
+      role: 'COACH',
+      coach: {
+        create: {
+          rank: 'Senior',
+        },
       },
     },
-  );
+    include: {
+      coach: true,
+    },
+  });
 
   const Admin = await prisma.user.create({
     data: {
       firstName: 'Admin',
       lastName: 'Adrie',
-      password: 'adminpassword',
+      email: 'adrie@example.com',
+      password: await bcrypt.hash('adminpassword', 12),
       role: 'ADMIN',
     },
   });
@@ -33,8 +44,17 @@ async function main() {
     data: {
       firstName: 'John',
       lastName: 'Doe',
-      password: 'playerpassword',
+      email: 'john@example.com',
+      password: await bcrypt.hash('playerpassword', 12),
       role: 'PLAYER',
+      player: {
+        create: {
+          playernumber: '10',
+        },
+      },
+    },
+    include: {
+      player: true,
     },
   });
 
@@ -42,8 +62,17 @@ async function main() {
     data: {
       firstName: 'Jane',
       lastName: 'Smith',
-      password: 'playerpassword',
+      email: 'jane@example.com',
+      password: await bcrypt.hash('playerpassword', 12),
       role: 'PLAYER',
+      player: {
+        create: {
+          playernumber: '11',
+        },
+      },
+    },
+    include: {
+      player: true,
     },
   });
 
@@ -51,33 +80,70 @@ async function main() {
     data: {
       firstName: 'Alice',
       lastName: 'Johnson',
-      password: 'playerpassword',
+      email: 'alice@example.com',
+      password: await bcrypt.hash('playerpassword', 12),
       role: 'PLAYER',
+      player: {
+        create: {
+          playernumber: '12',
+        },
+      },
+    },
+    include: {
+      player: true,
+    },
+  });
+
+  // Create events
+  const event1 = await prisma.event.create({
+    data: {
+      name: 'Training Session',
+      description: 'Weekly training session',
+      location: 'Stadium',
+      start: new Date('2024-01-01T10:00:00Z'),
+      end: new Date('2024-01-01T12:00:00Z'),
+    },
+  });
+
+  const event2 = await prisma.event.create({
+    data: {
+      name: 'Match Day',
+      description: 'Monthly match',
+      location: 'Stadium',
+      start: new Date('2024-01-15T14:00:00Z'),
+      end: new Date('2024-01-15T16:00:00Z'),
     },
   });
 
   // Create a team with the coach and players
   const team = await prisma.team.create({
     data: {
-        players: {
-            connect: [
-                { userId: John.userId },
-                { userId: Jane.userId },
-                { userId: Alice.userId },
-            ],
-        },
-        coach: {
-            connect: { userId: Chris.userId },
-        },
+      name: 'Team A',
+      coach: {
+        connect: { id: Chris.coach?.id },
+      },
+      players: {
+        connect: [
+          { id: John.player?.id },
+          { id: Jane.player?.id },
+          { id: Alice.player?.id },
+        ],
+      },
+      schedule: {
+        connect: [
+          { id: event1.id },
+          { id: event2.id },
+        ],
+      },
     },
   });
 
   // Update the coach with the teamId
-  await prisma.user.update({
-    where: { userId: Chris.userId },
-    data: { teamId: team.teamId },
+  await prisma.coach.update({
+    where: { id: Chris.coach?.id },
+    data: { teams: { connect: { id: team.id } } },
   });
-}
+};
 
 (async () => {
   try {

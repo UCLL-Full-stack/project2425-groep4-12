@@ -1,37 +1,36 @@
-type Role = "ADMIN" | "COACH" | "PLAYER" | "GUEST";
+type Role = "ADMIN" | "COACH" | "PLAYER";
 
 type UserInput = {
     id?: number;
-    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
     password: string;
     role: Role;
-    attendance?: number;
+    attendance: number | null;
 }
 
-type TrainingInput = {
-    trainingId?: number;
-    date: Date;
-    hall: string;
-    square: number;
-    players?: UserInput[];
-    coach: UserInput;
-}
+type CoachInput = {
+    id?: number;
+    user: UserInput;
+    rank: string;
+    events: EventInput[];
+};
 
-type TeamInput = {
-    teamId?: number;
-    members?: UserInput[];
-    coach: UserInput;
-}
+type PlayerInput = {
+    id?: number;
+    user: UserInput;
+    playernumber: string;
+};
 
-type MatchInput = {
-    matchId?: number;
-    date: Date;
-    hall: string;
-    square: number;
-    players?: UserInput[];
-    coach: UserInput;
-}
+type EventInput = {
+    id?: number;
+    name:        String;
+    description: String;
+    location:    String;
+};
+
 
 export {
-    Role, UserInput, TrainingInput, TeamInput, MatchInput,
+    Role, UserInput,
 }

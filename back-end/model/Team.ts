@@ -1,43 +1,103 @@
-import { Role } from "../types";
-import { User } from "./User";
-
 import {
+    Event as EventPrisma,
+    Coach as CoachPrisma,
     Team as TeamPrisma,
-    User as UserPrisma
+    Player as PlayerPrisma,
+    User as UserPrisma,
 } from '@prisma/client';
-
+import { Event } from './Event';
+import { Coach } from './Coach';
+import { Player } from './Player';
 
 export class Team {
-    private teamId? : number;
-    private players? : Array<User>; 
-    private coach : User;
+    private id?: number;
+    private name: string;
+    private coach: Coach;
+    private players: Player[];
+    private schedule: Event[];
 
-    constructor (team: {
-        teamId? : number,
-        players? : Array<User>, 
-        coach : User,
+    constructor(team: {
+        id?: number;
+        name: string;
+        coach: Coach;
+        players: Player[];
+        schedule: Event[];
     }) {
-        this.teamId = team.teamId;
-        this.players = team.players || new Array<User>(); 
+        this.validate(team);
+
+        this.id = team.id;
+        this.name = team.name;
         this.coach = team.coach;
-    }
-    getId() {
-        return this.teamId;
+        this.players = team.players || [];
+        this.schedule = team.schedule || [];
     }
 
-    static from ({
-        teamId,
+    getId(): number | undefined {
+        return this.id;
+    }
+
+    getName(): string {
+        return this.name;
+    }
+
+    getCoach(): Coach {
+        return this.coach;
+    }
+
+    getPlayers(): Player[] {
+        return this.players;
+    }
+
+    getSchedule(): Event[] {
+        return this.schedule;
+    }
+
+    validate(schedule: {name: string; coach: Coach }) {
+        if (!schedule.name?.trim()) {
+            throw new Error('Name is required');
+        }
+        if (!schedule.coach) {
+            throw new Error('Coach is required');
+        }
+    }
+
+    addPlayerToTeam(player: Player) {
+        if (!player) throw new Error('Player is required');
+        if (this.players.includes(player))
+            throw new Error('Player is already enrolled in this team');
+        this.players.push(player);
+    }
+
+    equals(team: Team): boolean {
+        return (
+            this.id === team.getId() &&
+            this.name === team.getName() &&
+            this.coach.equals(team.getCoach()) &&
+            this.players.every((player, index) => player.equals(team.getPlayers()[index]))
+        );
+    }
+
+    static from({
+        id,
+        name,
+        coach,
         players,
-        coach
-    }: TeamPrisma & { players: UserPrisma[], coach: UserPrisma }): Team {
-    
+        schedule,
+    }: TeamPrisma & {
+        event: EventPrisma;
+        coach: CoachPrisma & {
+            user: UserPrisma;
+            schedule: EventPrisma[];
+        };
+        players: (PlayerPrisma & { user: UserPrisma })[];
+        schedule: EventPrisma[];
+    }) {
         return new Team({
-            teamId,
-            players: players
-                .filter((player: UserPrisma) => player.role === "PLAYER")
-                .map((player: any) => User.from(player)),
-            coach: coach.role === "COACH" ? User.from(coach) : (() => { throw new Error("Team has no coach"); })() 
+            id,
+            name,
+            coach: Coach.from(coach),
+            players: players.map((player) => Player.from(player)),
+            schedule: schedule.map((event) => Event.from(event)),
         });
     }
-
 }

@@ -1,11 +1,68 @@
-
-
+/**
+ * @swagger
+ *   components:
+ *      User:
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            firstName:
+ *              type: string
+ *              description: First name.
+ *            lastName:
+ *              type: string
+ *              description: Last name.
+ *            email:
+ *              type: string
+ *              description: E-mail.
+ *            password:
+ *              type: string
+ *              description: User password.
+ *            role:
+ *               $ref: '#/components/schemas/Role'
+ *      UserInput:
+ *          type: object
+ *          properties:
+ *            firstName:
+ *              type: string
+ *              description: First name.
+ *            lastName:
+ *              type: string
+ *              description: Last name.
+ *            email:
+ *              type: string
+ *              description: E-mail.
+ *            password:
+ *              type: string
+ *              description: User password.
+ *            role:
+ *               $ref: '#/components/schemas/Role'
+ *      Role:
+ *          type: string
+ *          enum: [PLAYER, COACH, ADMIN]
+ */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
-
+import { UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Get a list of all users
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/User'
+ */
 userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
@@ -15,41 +72,35 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-userRouter.get('/players', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const players = await userService.getAllPlayers();
-        res.status(200).json(players);
-    } catch (error) {
-        next(error);
-    }
-});
 
-userRouter.get('/coaches', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const coaches = await userService.getAllCoaches();
-        res.status(200).json(coaches);
-    } catch (error) {
-        next(error);
-    }
-});
 
-userRouter.get('/admins', async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *      summary: Create a user
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *      responses:
+ *         200:
+ *            description: The created user object
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/User'
+ */
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const admins = await userService.getAllAdmins();
-        res.status(200).json(admins);
-    } catch (error) {
-        next(error);
-    }
-});
-
-userRouter.get('/:userId', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const userId = parseInt(req.params.userId);
-        const user = await userService.getUserById(userId);
+        const userInput = <UserInput>req.body;
+        const user = await userService.createUser(userInput);
         res.status(200).json(user);
     } catch (error) {
         next(error);
     }
 });
 
-export {userRouter};
+export { userRouter };

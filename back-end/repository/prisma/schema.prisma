@@ -1,59 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model User {
-  userId     Int      @id @default(autoincrement())
-  firstName  String
-  lastName   String
-  password   String
-  role       Role
-  attendance Int?
-  teamId     Int?
-  team       Team?    @relation("TeamToPlayers", fields: [teamId], references: [teamId])
-  trainings  Training[] @relation("UserToTrainings")
-  matches    Match[]    @relation("UserToMatches")
-  coachedTrainings Training[] @relation("UserToCoachedTrainings")
-  coachedMatches   Match[]    @relation("UserToCoachedMatches")
-  coachedTeams     Team[]     @relation("UserToCoachedTeams")
-
-  @@unique([userId, teamId])
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  firstName String
+  lastName  String
+  email     String    @unique
+  password  String
+  role      String
+  coach     Coach?
+  player    Player?
 }
 
-model Training {
-  trainingId Int      @id @default(autoincrement())
-  date       DateTime
-  hall       String
-  square     Int
-  coachId    Int
-  coach      User     @relation("UserToCoachedTrainings", fields: [coachId], references: [userId])
-  players    User[]   @relation("UserToTrainings")
+model Coach {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  rank      String
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id])
+  schedule  Event[]
+  teams     Team[]
+}
+
+model Player {
+  id            Int        @id @default(autoincrement())
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  playernumber  String     @unique
+  userId        Int        @unique
+  user          User       @relation(fields: [userId], references: [id])
+  teams         Team[]
+}
+
+model Event {
+  id          Int        @id @default(autoincrement())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  name        String
+  description String
+  location    String
+  start       DateTime
+  end         DateTime
+  teams       Team[]
+  coaches     Coach[]
 }
 
 model Team {
-  teamId  Int      @id @default(autoincrement())
-  coachId Int
-  coach   User     @relation("UserToCoachedTeams", fields: [coachId], references: [userId])
-  players User[]   @relation("TeamToPlayers")
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  name       String
+  coach      Coach     @relation(fields: [coachId], references: [id])
+  coachId    Int
+  players    Player[]
+  schedule   Event[]
 }
 
-model Match {
-  matchId Int      @id @default(autoincrement())
-  date    DateTime
-  hall    String
-  square  Int
-  players User[]   @relation("UserToMatches")
-  coachId Int
-  coach   User     @relation("UserToCoachedMatches", fields: [coachId], references: [userId])
-}
-
-enum Role {
-  PLAYER
-  COACH
-  ADMIN
-}
