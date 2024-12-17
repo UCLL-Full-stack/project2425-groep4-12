@@ -28,9 +28,25 @@ type EventInput = {
     name:        String;
     description: String;
     location:    String;
+    start:       Date;
+    end:         Date;
 };
 
+type TeamInput = {
+    id?: number;
+    name: string;
+    coach: CoachInput;
+    players: PlayerInput[];
+    schedule: EventInput[];
+};
+
+type AuthenticationResponse = {
+    token: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+};
 
 export {
-    Role, UserInput,
+    Role, UserInput, CoachInput, PlayerInput, EventInput, TeamInput, AuthenticationResponse
 }

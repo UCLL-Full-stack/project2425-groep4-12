@@ -6,11 +6,11 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { playerRouter } from './controller/player.routes';
-;
+import { expressjwt } from 'express-jwt';
 import helmet from 'helmet';
 import { coachRouter } from './controller/coach.routes';
-import { teamRouter } from './controller/team.routes';
 import { eventRouter } from './controller/event.routes';
+// import { teamRouter } from './controller/team.routes';
 
 
 const app = express();
@@ -24,8 +24,18 @@ app.use(
         },
     })
 );
+
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
+
+app.use(
+    expressjwt({
+        secret: process.env.JWT_SECRET || 'default_secret',
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
+    })
+);
 
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());

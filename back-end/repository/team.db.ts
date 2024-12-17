@@ -1,38 +1,156 @@
-// import { Team } from '../model/team';
-// import User from '../model/User';
-// import { TeamInput } from '../types';
+import database from '../util/database';
+import { Team } from '../model/Team';
+import { get } from 'http';
 
-// const members = [
-//     new User({ userId: 1, username: 'user1', password: 'password1', role: 'Player', attendance: 0 }),
-//     new User({ userId: 2, username: 'user2', password: 'password2', role: 'Player', attendance: 0 }),
-//     new User({ userId: 3, username: 'user3', password: 'password3', role: 'Player', attendance: 0 }),
-//     new User({ userId: 4, username: 'user4', password: 'password4', role: 'Player', attendance: 0 }),
-//     new User({ userId: 5, username: 'user5', password: 'password5', role: 'Player', attendance: 0 }),
-//     new User({ userId: 6, username: 'user6', password: 'password6', role: 'Player', attendance: 0 }),
-// ];
+const createTeam = async (team: Team): Promise<Team> => {
+    try {
+        const teamPrisma = await database.team.create({
+            data: {
+                name: team.getName(),
+                coach: {
+                    connect: { id: team.getCoach().getId() },
+                },
+                schedule: {
+                    connect: team.getSchedule().map((event) => ({ id: event.getId() })),
+                },
+            },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
 
-// const coach = new User({ userId: 7, username: 'coach1', password: 'password1', role: 'Coach', attendance: 0 });
+        return Team.from(teamPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-// const teams = [
-//     new Team({ teamId: 1, members: members, coach: coach }),
-// ];
+const updatePlayersOfTeam = async ({ team }: { team: Team }): Promise<Team | null> => {
+    try {
+        const teamPrisma = await database.team.update({
+            where: { id: team.getId() },
+            data: {
+                players: {
+                    connect: team.getPlayers().map((player) => ({ id: player.getId() })),
+                },
+                schedule: {
+                    connect: team.getSchedule().map((event) => ({ id: event.getId() })),
+                },
+            },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamPrisma ? Team.from(teamPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-// const addTeam = ({ teamId, members, coach }: TeamInput): Team => {
-//     const team = new Team({
-//         teamId,
-//         members,
-//         coach,
-//     });
-//     teams.push(team);
-//     return team;
-// };
+const getAllTeams = async (): Promise<Team[]> => {
+    try {
+        const teamsPrisma = await database.team.findMany({
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamsPrisma.map((teamPrisma) => Team.from(teamPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-// const getAllTeams = (): Team[] => {
-//     return teams;
-// };
 
-// const getTeamById = (teamId: number): Team | undefined => {
-//     return teams.find((team) => team.getId() === teamId);
-// };
+const getTeamById = async ({ id }: { id: number }): Promise<Team | null> => {
+    try {
+        const teamPrisma = await database.team.findUnique({
+            where: { id },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+                
+            },
+        });
+        return teamPrisma ? Team.from(teamPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
-// export default { addTeam, getAllTeams, getTeamById };
+const getAllTeamsByCoachName = async ({
+    firstName,
+    lastName,
+}: {
+    firstName: string;
+    lastName: string;
+}): Promise<Team[]> => {
+    try {
+        const teamsPrisma = await database.team.findMany({
+            where: {
+                coach: {
+                    user: {
+                        firstName,
+                        lastName,
+                    },
+                },
+            },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamsPrisma.map((teamPrisma) => Team.from(teamPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const getTeamByPlayersAndCoach = async ({
+    playerId,
+    coachId,
+}: {
+    playerId: number[];
+    coachId: number;
+}): Promise<Team | null> => {
+    try {
+        const teamPrisma = await database.team.findFirst({
+            where: {
+                AND: [
+                    { players: { some: { id: { in: playerId } } } },
+                    { coachId },
+                ],
+            },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamPrisma ? Team.from(teamPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+export default {
+    createTeam,
+    updatePlayersOfTeam,
+    getAllTeams,
+    getTeamById,
+    getAllTeamsByCoachName,
+    getTeamByPlayersAndCoach,
+};
