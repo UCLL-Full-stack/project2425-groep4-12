@@ -1,7 +1,8 @@
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
-    "username" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -41,22 +42,10 @@ CREATE TABLE "Event" (
     "name" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "location" TEXT NOT NULL,
-    "date" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Schedule" (
-    "id" SERIAL NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
     "start" TIMESTAMP(3) NOT NULL,
     "end" TIMESTAMP(3) NOT NULL,
-    "eventId" INTEGER NOT NULL,
-    "coachId" INTEGER NOT NULL,
 
-    CONSTRAINT "Schedule_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -77,19 +66,16 @@ CREATE TABLE "_CoachToEvent" (
 );
 
 -- CreateTable
-CREATE TABLE "_PlayerToSchedule" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
-);
-
--- CreateTable
 CREATE TABLE "_PlayerToTeam" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+-- CreateTable
+CREATE TABLE "_EventToTeam" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
@@ -110,28 +96,22 @@ CREATE UNIQUE INDEX "_CoachToEvent_AB_unique" ON "_CoachToEvent"("A", "B");
 CREATE INDEX "_CoachToEvent_B_index" ON "_CoachToEvent"("B");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_PlayerToSchedule_AB_unique" ON "_PlayerToSchedule"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_PlayerToSchedule_B_index" ON "_PlayerToSchedule"("B");
-
--- CreateIndex
 CREATE UNIQUE INDEX "_PlayerToTeam_AB_unique" ON "_PlayerToTeam"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_PlayerToTeam_B_index" ON "_PlayerToTeam"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_EventToTeam_AB_unique" ON "_EventToTeam"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_EventToTeam_B_index" ON "_EventToTeam"("B");
 
 -- AddForeignKey
 ALTER TABLE "Coach" ADD CONSTRAINT "Coach_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Player" ADD CONSTRAINT "Player_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Schedule" ADD CONSTRAINT "Schedule_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Schedule" ADD CONSTRAINT "Schedule_coachId_fkey" FOREIGN KEY ("coachId") REFERENCES "Coach"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Team" ADD CONSTRAINT "Team_coachId_fkey" FOREIGN KEY ("coachId") REFERENCES "Coach"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -143,13 +123,13 @@ ALTER TABLE "_CoachToEvent" ADD CONSTRAINT "_CoachToEvent_A_fkey" FOREIGN KEY ("
 ALTER TABLE "_CoachToEvent" ADD CONSTRAINT "_CoachToEvent_B_fkey" FOREIGN KEY ("B") REFERENCES "Event"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_PlayerToSchedule" ADD CONSTRAINT "_PlayerToSchedule_A_fkey" FOREIGN KEY ("A") REFERENCES "Player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_PlayerToSchedule" ADD CONSTRAINT "_PlayerToSchedule_B_fkey" FOREIGN KEY ("B") REFERENCES "Schedule"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "_PlayerToTeam" ADD CONSTRAINT "_PlayerToTeam_A_fkey" FOREIGN KEY ("A") REFERENCES "Player"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_PlayerToTeam" ADD CONSTRAINT "_PlayerToTeam_B_fkey" FOREIGN KEY ("B") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_EventToTeam" ADD CONSTRAINT "_EventToTeam_A_fkey" FOREIGN KEY ("A") REFERENCES "Event"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_EventToTeam" ADD CONSTRAINT "_EventToTeam_B_fkey" FOREIGN KEY ("B") REFERENCES "Team"("id") ON DELETE CASCADE ON UPDATE CASCADE;
