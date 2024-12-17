@@ -10,6 +10,7 @@ import { playerRouter } from './controller/player.routes';
 import helmet from 'helmet';
 import { coachRouter } from './controller/coach.routes';
 import { teamRouter } from './controller/team.routes';
+import { eventRouter } from './controller/event.routes';
 
 
 const app = express();
@@ -32,6 +33,7 @@ app.use(bodyParser.json());
 app.use('/users', userRouter);
 app.use('/players', playerRouter);
 app.use('/coaches', coachRouter);
+app.use('/events', eventRouter);
 // app.use('/teams', teamRouter);
 
 app.get('/status', (req, res) => {

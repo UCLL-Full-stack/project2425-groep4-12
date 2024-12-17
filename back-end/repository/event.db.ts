@@ -33,7 +33,20 @@ const getEventById = async ({ id }: { id: number }): Promise<Event | null> => {
     }
 };
 
+const getAllEvents = async (): Promise<Event[]> => {
+    try {
+        const eventsPrisma = await database.event.findMany({
+            orderBy: { start: 'asc' },
+        });
+        return eventsPrisma.map((eventPrisma) => Event.from(eventPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createEvent,
     getEventById,
+    getAllEvents,
 };

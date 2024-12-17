@@ -32,4 +32,30 @@ eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
+
+/**
+ * @swagger
+ * /events:
+ *   get:
+ *     summary: Get a list of all events
+ *     responses:
+ *       200:
+ *         description: A list of events.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Event'
+ */
+
+eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const events = await eventService.getAllEvents();
+        res.status(200).json(events);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { eventRouter };
