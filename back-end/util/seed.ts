@@ -9,7 +9,15 @@ const main = async () => {
   await prisma.team.deleteMany();
   await prisma.coach.deleteMany();
   await prisma.player.deleteMany();
+  await prisma.admin.deleteMany();
   await prisma.user.deleteMany();
+
+  // Encrypt passwords
+  const hashedPasswordChris = await bcrypt.hash('password', 12);
+  const hashedPasswordJohn = await bcrypt.hash('password', 12);
+  const hashedPasswordJane = await bcrypt.hash('password', 12);
+  const hashedPasswordAlice = await bcrypt.hash('password', 12);
+  const hashedPasswordAdrie = await bcrypt.hash('password', 12);
 
   // Create users
   const ChrisUser = await prisma.user.create({
@@ -17,7 +25,7 @@ const main = async () => {
       firstName: 'Chris',
       lastName: 'Evans',
       email: 'chris@example.com',
-      password: 'password',
+      password: hashedPasswordChris,
       role: 'COACH',
     },
   });
@@ -27,7 +35,7 @@ const main = async () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
-      password: 'password',
+      password: hashedPasswordJohn,
       role: 'PLAYER',
     },
   });
@@ -37,7 +45,7 @@ const main = async () => {
       firstName: 'Jane',
       lastName: 'Doe',
       email: 'jane@example.com',
-      password: 'password',
+      password: hashedPasswordJane,
       role: 'PLAYER',
     },
   });
@@ -47,8 +55,18 @@ const main = async () => {
       firstName: 'Alice',
       lastName: 'Smith',
       email: 'alice@example.com',
-      password: 'password',
+      password: hashedPasswordAlice,
       role: 'PLAYER',
+    },
+  });
+
+  const AdrieUser = await prisma.user.create({
+    data: {
+      firstName: 'Adrie',
+      lastName: 'Admin',
+      email: 'adrie@example.com',
+      password: hashedPasswordAdrie,
+      role: 'ADMIN',
     },
   });
 
@@ -86,6 +104,15 @@ const main = async () => {
       playernumber: '12',
       user: {
         connect: { id: AliceUser.id },
+      },
+    },
+  });
+
+  // Create admin
+  const AdrieAdmin = await prisma.admin.create({
+    data: {
+      user: {
+        connect: { id: AdrieUser.id },
       },
     },
   });

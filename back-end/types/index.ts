@@ -7,7 +7,6 @@ type UserInput = {
     email: string;
     password: string;
     role: Role;
-    attendance: number | null;
 }
 
 type CoachInput = {

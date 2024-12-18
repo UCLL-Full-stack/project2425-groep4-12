@@ -103,9 +103,6 @@ const teamRouter = express.Router();
  *           type: string
  *         role:
  *           type: string
- *         attendance:
- *           type: number
- *           nullable: true
  */
 
 /**
