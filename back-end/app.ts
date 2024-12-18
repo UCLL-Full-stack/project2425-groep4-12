@@ -6,11 +6,11 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { playerRouter } from './controller/player.routes';
-import { expressjwt } from 'express-jwt';
-import helmet from 'helmet';
 import { coachRouter } from './controller/coach.routes';
 import { eventRouter } from './controller/event.routes';
-// import { teamRouter } from './controller/team.routes';
+import { teamRouter } from './controller/team.routes';
+import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 
 
 const app = express();
@@ -44,17 +44,17 @@ app.use('/users', userRouter);
 app.use('/players', playerRouter);
 app.use('/coaches', coachRouter);
 app.use('/events', eventRouter);
-// app.use('/teams', teamRouter);
+app.use('/teams', teamRouter);
 
 app.get('/status', (req, res) => {
-    res.json({ message: 'TeamTracker API is running...' });
+    res.json({ message: 'TeamTrackr API is running...' });
 });
 
 const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'TeamTracker API',
+            title: 'TeamTrackrs API',
             version: '1.0.0',
         },
     },
@@ -66,7 +66,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({ status: 'unauthorized', message: err.message });
-    } else if (err.name === 'CoursesError') {
+    } else if (err.name === 'TeamTrackrsError') {
         res.status(400).json({ status: 'domain error', message: err.message });
     } else {
         res.status(400).json({ status: 'application error', message: err.message });
@@ -74,5 +74,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port || 3000, () => {
-    console.log(`TeamTracker API is running on port ${port}.`);
+    console.log(`TeamTrackrs API is running on port ${port}.`);
 });

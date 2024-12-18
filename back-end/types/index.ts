@@ -47,6 +47,11 @@ type AuthenticationResponse = {
     role: string;
 };
 
+type EnrollmentInput = {
+    team: TeamInput;
+    players: PlayerInput[];
+};
+
 export {
-    Role, UserInput, CoachInput, PlayerInput, EventInput, TeamInput, AuthenticationResponse
+    Role, UserInput, CoachInput, PlayerInput, EventInput, TeamInput, AuthenticationResponse, EnrollmentInput
 }

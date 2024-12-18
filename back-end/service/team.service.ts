@@ -30,42 +30,57 @@ const getAllTeams = async ({
 
 const createTeam = async ({
     name,
-    coach: coachInput,
-    players: playersInput = [],
-    schedule: eventInput = [],
-}: TeamInput): Promise<Team> => {
-    if (!coachInput.id) throw new Error('Coach id is required');
-    const coach = await coachDb.getCoachById({ id: coachInput.id });
-    const players = await Promise.all(
-        playersInput.map(async (playerInput) => {
-            if (!playerInput.id) throw new Error('Player id is required');
-            const player = await playerDb.getPlayerById({ id: playerInput.id });
-            if (!player) throw new Error(`Player with id ${playerInput.id} not found`);
-            return player;
-        })
-    );
-    const events = await Promise.all(
-        eventInput.map(async (eventInput): Promise<Event> => {
-        if (!eventInput.id) throw new Error('Event id is required');
-        const event = await eventDb.getEventById({ id: eventInput.id });
-        if (!event) throw new Error(`Event with id ${eventInput.id} not found`);
-        return event;
-    }),
-    );
+    coach,
+    players,
+    schedule,
+    role,
+}: {
+    name: string;
+    coach: CoachInput;
+    players: PlayerInput[];
+    schedule: EventInput[];
+    role: Role;
     
+}): Promise<Team> => {
+    if (role === 'ADMIN'){
+        if (!coach.id) throw new Error('Coach id is required');
+        const coachData = await coachDb.getCoachById({ id: coach.id });
+        if (!coachData) throw new Error(`Coach with id ${coach.id} not found`);
+        const playerEntities = await Promise.all(
+            players.map(async (playerInput) => {
+                if (!playerInput.id) throw new Error('Player id is required');
+                const player = await playerDb.getPlayerById({ id: playerInput.id });
+                if (!player) throw new Error(`Player with id ${playerInput.id} not found`);
+                return player;
+            })
+        );
+        const events = await Promise.all(
+            schedule.map(async (eventInput): Promise<Event> => {
+            if (!eventInput.id) throw new Error('Event id is required');
+            const event = await eventDb.getEventById({ id: eventInput.id });
+            if (!event) throw new Error(`Event with id ${eventInput.id} not found`);
+            return event;
+        }),
+        );
+        
 
-    if (!coach) throw new Error('Coach not found');
-    if (!players) throw new Error('Players not found');
+        if (!coach) throw new Error('Coach not found');
+        if (!players) throw new Error('Players not found');
 
-    const existingTeam = await teamDb.getTeamByPlayersAndCoach({
-        playerId: playersInput.map((player) => player.id).filter((id): id is number => id !== undefined),
-        coachId: coachInput.id,
-    });
+        const existingTeam = await teamDb.getTeamByPlayersAndCoach({
+            playerId: players.map((player) => player.id).filter((id): id is number => id !== undefined),
+            coachId: coach.id,
+        });
 
-    if (existingTeam) throw new Error('This team already exists');
+        if (existingTeam) throw new Error('This team already exists');
 
-    let team = new Team({ name, coach, players, schedule: events });
-    return await teamDb.createTeam(team);
+        let team = new Team({ name, coach: coachData, players: playerEntities, schedule: events });
+        return await teamDb.createTeam(team);
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
 };
 
 const addPlayersToTeam = async ({

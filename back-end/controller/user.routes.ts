@@ -85,6 +85,8 @@ const userRouter = express.Router();
  * @swagger
  * /users:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all users
  *     responses:
  *       200:
@@ -100,35 +102,6 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
-    } catch (error) {
-        next(error);
-    }
-});
-
-
-
-/**
- * @swagger
- * /users/signup:
- *   get:
- *     security:
- *       - bearerAuth: []
- *     summary: Get a list of all users
- *     responses:
- *       200:
- *         description: A list of users.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                  $ref: '#/components/schemas/User'
- */
-userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const userInput = <UserInput>req.body;
-        const user = await userService.createUser(userInput);
-        res.status(200).json(user);
     } catch (error) {
         next(error);
     }
@@ -163,5 +136,40 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         next(error);
     }
 });
+
+
+
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *      summary: Create a user
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *      responses:
+ *         200:
+ *            description: The created user object
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/User'
+ */
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const user = await userService.createUser(userInput);
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
+
 
 export { userRouter };

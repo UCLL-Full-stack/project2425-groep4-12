@@ -154,11 +154,15 @@ const main = async () => {
   });
 };
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+(async () => {
+  try {
+      await main();
+      await prisma.$disconnect();
+      console.log('Seed successful');
+  } catch (error) {
+      console.error(error);
+      await prisma.$disconnect();
+      process.exit(1);
+      console.log('Seed failed');
+  }
+})();

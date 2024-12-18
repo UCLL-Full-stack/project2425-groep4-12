@@ -17,6 +17,7 @@ model User {
   role      String
   coach     Coach?
   player    Player?
+  admin     Admin?
 }
 
 model Coach {
@@ -64,3 +65,10 @@ model Team {
   schedule   Event[]
 }
 
+model Admin {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    Int       @unique
+  user      User      @relation(fields: [userId], references: [id])
+}

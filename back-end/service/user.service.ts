@@ -5,6 +5,7 @@ import { User } from '../model/User';
 import { AuthenticationResponse, UserInput } from '../types';
 import { generateJwtToken } from '../util/jwt';
 import bcrypt from 'bcrypt';
+import adminService from './admin.service';
 
 
 const getAllUsers = async (): Promise<User[]> => userDB.getAllUsers();
@@ -39,6 +40,8 @@ const createUser = async ({
         await playerService.createPlayer(createdUser.getid()!);
     } else if (role === 'COACH') {
         await coachService.createCoach(createdUser.getid()!);
+    }else if (role === 'ADMIN') {
+        await adminService.createAdmin(createdUser.getid()!);
     }
 
     return createdUser;
