@@ -1,4 +1,4 @@
-export type Role = "ADMIN" | "Coach" | "Player" | "Guest"
+export type Role = "Admin" | "Coach" | "Player" | "Guest"
 
 export interface User {
     userId?: number;
@@ -8,27 +8,19 @@ export interface User {
     attendance?: number;
 }
 
-export type Training = {
-    trainingId?: number;
-    date: Date;
-    hall: string;
-    square: number;
-    players?: Array<User>;
-    coach: User;
+export type Event = {
+    eventId?: number;
+    name: string;
+    description: string;
+    location: string;
+    start: Date;
+    end: Date;
 }
 
 export type Team = {
     teamId?: number;
     members?: Array<User>;
     coach: User;
-}
-
-export type Match = {
-    matchId?: number;
-    date: Date;
-    hall: string;
-    square: number;
-    players?: Array<User>;
 }
 
 export type StatusMessage = {

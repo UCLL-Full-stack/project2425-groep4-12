@@ -6,9 +6,8 @@
     "header": {
         "title": "TeamTracker",
         "homepage": "Homepage",
-        "training": "Training",
+        "event": "Events",
         "teams": "Teams",
-        "matches": "Matches",
         "login": "Login",
         "logout": "Logout",
         "profile": "Profile"
@@ -31,5 +30,10 @@
         "message": "An unknown error has occured. Please try again later.",
         "nameReq": "Name is required",
         "pwdReq": "Password is required"
+    },
+
+    "event": {
+        "title": "Events",
+        "h1": "List of events"
     }
 }
