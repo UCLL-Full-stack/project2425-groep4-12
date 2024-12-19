@@ -1,20 +1,24 @@
 .header {
-    padding: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 0.5rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: var(--font-mono);
+    background-color: rgb(0, 140, 255);
+    border-radius: 1rem;
 }
 
 .title {
+    padding: 0.5rem 3rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: 75px;
     font-weight: 1000;
-    font-family: var(--font-mono);
+    background-color: yellow;
+    border-radius: 3rem;
 }
 
 .nav {
@@ -22,13 +26,17 @@
     flex-direction: row;
     font-size: 30px;
     margin: 1rem;
-    font-family: var(--font-mono);
 }
 
-.card {
-    padding: 0 1.2rem;
-    border-radius: var(--border-radius);
-    background: rgba(var(--card-rgb), 0);
-    border: 1px solid rgba(var(--card-border-rgb), 0);
-    transition: background 200ms, border 200ms;
+.nav a {
+    text-decoration: none;
+    padding: 0.5rem 1.2rem;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 2rem;
+}
+
+.nav a:hover {
+    background-color: rgb(255, 230, 0);
+    color: black;
 }

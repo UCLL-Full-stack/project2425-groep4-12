@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router"
 import LoginService from "@services/LoginService";
 import classNames from "classnames";
-import styles from "@/styles/Home.module.css"
+import styles from "@styles/home.module.css"
 
 import { useTranslation } from "next-i18next";
 

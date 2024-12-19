@@ -4,7 +4,7 @@ export interface User {
     userId?: number;
     username: string;
     password: string;
-    role: Role;
+    role?: Role;
     attendance?: number;
 }
 
