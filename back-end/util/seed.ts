@@ -189,7 +189,7 @@ const main = async () => {
   } catch (error) {
       console.error(error);
       await prisma.$disconnect();
-      process.exit(1);
       console.log('Seed failed');
+      process.exit(1);
   }
 })();
