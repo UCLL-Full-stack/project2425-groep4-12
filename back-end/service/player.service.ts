@@ -2,6 +2,7 @@ import { ro } from 'date-fns/locale';
 import { Player } from '../model/Player';
 import playerDb from '../repository/player.db';
 import { Role } from '../types';
+import { UnauthorizedError } from 'express-jwt';
 
 const getAllPlayers = async ({ firstName, lastName, role }: { firstName: string; lastName: string; role: Role }): Promise<Player[]> => {
     if (role === 'ADMIN') {
@@ -11,7 +12,9 @@ const getAllPlayers = async ({ firstName, lastName, role }: { firstName: string;
     } else if (role === 'PLAYER') {
         return playerDb.getAllPlayersFromTeamByPlayerName({ firstName, lastName });
     } else {
-        throw new Error('You are not authorized to access this resource.');
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
     }
 };
 

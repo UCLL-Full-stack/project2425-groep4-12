@@ -141,4 +141,18 @@ const getAllEventsByPlayer = async ({
     }
 };
 
-export default { getAllTeams, createTeam, addPlayersToTeam, getAllEventsByPlayer };
+const deleteTeam = async ({ id, role }: { id: number, role: Role }): Promise<Team | null> => {
+    if (role === 'ADMIN') {
+        const team = await teamDb.getTeamById({ id });
+        if (!team) throw new Error(`Team with id ${id} does not exist`);
+        return teamDb.deleteTeam({ id });
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
+
+
+
+export default { getAllTeams, createTeam, addPlayersToTeam, getAllEventsByPlayer, deleteTeam };

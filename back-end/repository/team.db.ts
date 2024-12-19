@@ -169,6 +169,23 @@ const getTeamsByPlayerId = async ({ playerId }: { playerId: number }): Promise<T
     }
 };
 
+const deleteTeam = async ({ id }: { id: number }): Promise<Team | null> => {
+    try {
+        const teamPrisma = await database.team.delete({
+            where: { id },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamPrisma ? Team.from(teamPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createTeam,
     updatePlayersOfTeam,
@@ -177,4 +194,5 @@ export default {
     getAllTeamsByCoachName,
     getTeamByPlayersAndCoach,
     getTeamsByPlayerId,
+    deleteTeam,
 };

@@ -1,12 +1,15 @@
 import { Admin } from '../model/Admin';
 import adminDb from '../repository/admin.db';
 import { Role } from '../types';
+import { UnauthorizedError } from 'express-jwt';
 
 const getAllAdmins = async ({role}: {role: Role}): Promise<Admin[]> => {
     if (role === 'ADMIN') {
         return adminDb.getAllAdmins();
     } else {
-        throw new Error('You are not authorized to access this resource.');
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
     }
 };
 const getAdminById = async (id: number): Promise<Admin> => {
