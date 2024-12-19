@@ -91,27 +91,18 @@ const createTeam = async ({
     }
 };
 
-const addPlayersToTeam = async ({
-    team: teamInput,
-    players: playersInput,
-    role: role,
-}: {
-    team: TeamInput;
-    players: PlayerInput[];
-    role: Role;
-}): Promise<Team | null> => {
+const addPlayersToTeam = async ({ teamId, playerIds, role }: { teamId: number, playerIds: number[], role: Role }): Promise<Team | null> => {
     if (role === 'ADMIN' || role === 'COACH') {
-        if (!teamInput.id) throw new Error('Schedule id is required');
-        if (!playersInput) throw new Error('At least one player is required');
+        if (teamId === undefined) throw new Error('Team id is required');
+        if (!playerIds || playerIds.length === 0) throw new Error('At least one player id is required');
 
-        const team = await teamDb.getTeamById({ id: teamInput.id });
-        if (!team) throw new Error('Schedule not found');
+        const team = await teamDb.getTeamById({ id: teamId });
+        if (!team) throw new Error('Team not found');
 
         const players = await Promise.all(
-            playersInput.map(async (playerInput) => {
-                if (!playerInput.id) throw new Error('Player id is required');
-                const player = await playerDb.getPlayerById({ id: playerInput.id });
-                if (!player) throw new Error(`Player with id ${playerInput.id} not found`);
+            playerIds.map(async (playerId) => {
+                const player = await playerDb.getPlayerById({ id: playerId });
+                if (!player) throw new Error(`Player with id ${playerId} not found`);
                 return player;
             })
         );
@@ -164,7 +155,7 @@ const deleteTeam = async ({ id, role }: { id: number, role: Role }): Promise<Tea
 
 
 const removePlayerFromTeam = async ({ teamId, playerId, role }: { teamId: number, playerId: number; role: Role }): Promise<Team | null> => {
-    if (role === 'ADMIN') {
+    if (role === 'ADMIN' || role === 'COACH') {
         if (teamId === undefined) throw new Error('Team id is required');
         if (playerId === undefined) throw new Error('Player id is required');
         const team = await teamDb.getTeamById({ id: teamId });

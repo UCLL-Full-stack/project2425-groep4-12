@@ -209,7 +209,14 @@ teamRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/EnrollmentInput'
+ *              type: object
+ *              properties:
+ *                teamId:
+ *                  type: number
+ *                playerIds:
+ *                  type: array
+ *                  items:
+ *                    type: number
  *      responses:
  *         200:
  *            description: The team with all players.
@@ -222,8 +229,8 @@ teamRouter.post('/addPlayers', async (req: Request, res: Response, next: NextFun
     try {
         const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
         const { role } = request.auth;
-        const team = <EnrollmentInput>req.body;
-        const result = await teamService.addPlayersToTeam({ ...team, role });
+        const { teamId, playerIds } = req.body;
+        const result = await teamService.addPlayersToTeam({ teamId, playerIds, role });
         res.status(200).json(result);
     } catch (error) {
         next(error);
