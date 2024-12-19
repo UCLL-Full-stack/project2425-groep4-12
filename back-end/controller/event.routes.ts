@@ -6,6 +6,26 @@ const eventRouter = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Event:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *         name:
+ *           type: string
+ *         date:
+ *           type: string
+ *           format: date-time
+ *         location:
+ *           type: string
+ *         description:
+ *           type: string
+ */
+
+/**
+ * @swagger
  * /events/{id}:
  *   get:
  *     security:
