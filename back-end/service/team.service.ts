@@ -170,4 +170,47 @@ const removePlayerFromTeam = async ({ teamId, playerId, role }: { teamId: number
     }
 };
 
-export default { getAllTeams, createTeam, addPlayersToTeam, getAllEventsByPlayer, deleteTeam, removePlayerFromTeam };
+const addEventToTeamSchedule = async ({ teamId, event, role }: { teamId: number, event: EventInput; role: Role }): Promise<Team | null> => {
+    if (role === 'ADMIN' || role === 'COACH') {
+        if (teamId === undefined) throw new Error('Team id is required');
+
+        const team = await teamDb.getTeamById({ id: teamId });
+        if (!team) throw new Error(`Team with id ${teamId} does not exist`);
+
+        const eventEntity = new Event(event);
+        if (!eventEntity) throw new Error(`Failed to create event`);
+
+        // Ensure the event is created in the database
+        const createdEvent = await eventDb.createEvent(eventEntity);
+        if (!createdEvent) throw new Error(`Failed to create event in the database`);
+
+        team.addEventToSchedule(createdEvent);
+        const updatedTeam = await teamDb.updateEventsOfTeam({ teamId, eventIds: team.getSchedule().map(event => event.getId()).filter((id): id is number => id !== undefined) });
+        if (!updatedTeam) throw new Error(`Failed to update team schedule with new event`);
+        return updatedTeam;
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
+
+const removeEventFromTeamSchedule = async ({ teamId, eventId, role }: { teamId: number, eventId: number; role: Role }): Promise<Team | null> => {
+    if (role === 'ADMIN' || role === 'COACH') {
+        if (teamId === undefined) throw new Error('Team id is required');
+        if (eventId === undefined) throw new Error('Event id is required');
+
+        const team = await teamDb.getTeamById({ id: teamId });
+        if (!team) throw new Error(`Team with id ${teamId} does not exist`);
+
+        const updatedTeam = await teamDb.deleteEventFromTeamSchedule({ teamId, eventId });
+        if (!updatedTeam) throw new Error(`Failed to remove event with id ${eventId} from team with id ${teamId}`);
+        return updatedTeam;
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+}
+
+export default { getAllTeams, createTeam, addPlayersToTeam, getAllEventsByPlayer, deleteTeam, removePlayerFromTeam, addEventToTeamSchedule, removeEventFromTeamSchedule };

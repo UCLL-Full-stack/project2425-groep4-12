@@ -77,8 +77,6 @@ const teamRouter = express.Router();
  *     EventInput:
  *       type: object
  *       properties:
- *         id:
- *           type: number
  *         name:
  *           type: string
  *         description:
@@ -302,9 +300,83 @@ teamRouter.post('/removePlayer', async (req: Request, res: Response, next: NextF
         const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
         const { role } = request.auth;
         const { teamId, playerId } = req.body;
-        if (teamId === undefined) throw new Error('Team id is required');
-        if (playerId === undefined) throw new Error('Player id is required');
         const result = await teamService.removePlayerFromTeam({ teamId, playerId, role });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /teams/addEvents:
+ *   post:
+ *      security:
+ *       - bearerAuth: []
+ *      summary: Add events to a team's schedule.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                teamId:
+ *                  type: number
+ *                event:
+ *                  $ref: '#/components/schemas/EventInput'
+ *      responses:
+ *         200:
+ *            description: The team with the updated schedule.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/Team'
+ */
+teamRouter.post('/addEvents', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { role } = request.auth;
+        const { teamId, event } = req.body;
+        const result = await teamService.addEventToTeamSchedule({ teamId, event, role });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /teams/removeEvent:
+ *   post:
+ *      security:
+ *       - bearerAuth: []
+ *      summary: Remove an event from a team's schedule.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                teamId:
+ *                  type: number
+ *                eventId:
+ *                  type: number
+ *      responses:
+ *         200:
+ *            description: The team with the updated schedule after removing the event.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/Team'
+ */
+teamRouter.post('/removeEvent', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { role } = request.auth;
+        const { teamId, eventId } = req.body;
+        const result = await teamService.removeEventFromTeamSchedule({ teamId, eventId, role });
         res.status(200).json(result);
     } catch (error) {
         next(error);

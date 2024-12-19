@@ -117,6 +117,28 @@ const getAllTeamsByCoachName = async ({
     }
 };
 
+const updateEventsOfTeam = async ({ teamId, eventIds }: { teamId: number; eventIds: number[] }): Promise<Team | null> => {
+    try {
+        const teamPrisma = await database.team.update({
+            where: { id: teamId },
+            data: {
+                schedule: {
+                    set: eventIds.map((eventId) => ({ id: eventId })),
+                },
+            },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamPrisma ? Team.from(teamPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 const getTeamByPlayersAndCoach = async ({
     playerId,
     coachId,
@@ -207,6 +229,28 @@ const deletePlayerFromTeam = async ({ teamId, playerId }: { teamId: number; play
     }
 };
 
+const deleteEventFromTeamSchedule = async ({ teamId, eventId }: { teamId: number; eventId: number }): Promise<Team | null> => {
+    try {
+        const teamPrisma = await database.team.update({
+            where: { id: teamId },
+            data: {
+                schedule: {
+                    disconnect: { id: eventId },
+                },
+            },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamPrisma ? Team.from(teamPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createTeam,
     updatePlayersOfTeam,
@@ -217,4 +261,6 @@ export default {
     getTeamsByPlayerId,
     deleteTeam,
     deletePlayerFromTeam,
+    updateEventsOfTeam,
+    deleteEventFromTeamSchedule,
 };

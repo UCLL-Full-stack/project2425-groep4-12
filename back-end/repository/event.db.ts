@@ -20,7 +20,6 @@ const createEvent = async (event: Event): Promise<Event> => {
     }
 };
 
-
 const getEventById = async ({ id }: { id: number }): Promise<Event | null> => {
     try {
         const eventPrisma = await database.event.findUnique({

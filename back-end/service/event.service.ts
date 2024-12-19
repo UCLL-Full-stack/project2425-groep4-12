@@ -28,4 +28,8 @@ const getAllEvents = async ({firstName, lastName, role}: {firstName:string, last
 
 };
 
+const createEvent = async (event: Event): Promise<Event> => {
+    return eventDB.createEvent(event);
+}
+
 export default { getEventById, getAllEvents };

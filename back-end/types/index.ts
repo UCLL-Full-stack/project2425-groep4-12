@@ -23,10 +23,10 @@ type PlayerInput = {
 };
 
 type EventInput = {
-    id?: number;
-    name:        String;
-    description: String;
-    location:    String;
+    id?:         number;
+    name:        string;
+    description: string;
+    location:    string;
     start:       Date;
     end:         Date;
 };

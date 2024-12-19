@@ -68,6 +68,27 @@ export class Team {
         this.players.push(player);
     }
 
+    removePlayerFromTeam(player: Player) {
+        if (!player) throw new Error('Player is required');
+        if (!this.players.includes(player))
+            throw new Error('Player is not enrolled in this team');
+        this.players = this.players.filter((teamPlayer) => teamPlayer.getId() !== player.getId());
+    }
+
+    addEventToSchedule(event: Event) {
+        if (!event) throw new Error('Event is required');
+        if (this.schedule.includes(event))
+            throw new Error('Event is already in this team schedule');
+        this.schedule.push(event);
+    }
+
+    removeEventFromSchedule(event: Event) {
+        if (!event) throw new Error('Event is required');
+        if (!this.schedule.includes(event))
+            throw new Error('Event is not in this team schedule');
+        this.schedule = this.schedule.filter((teamEvent) => teamEvent.getId() !== event.getId());
+    }
+
     equals(team: Team): boolean {
         return (
             this.id === team.getId() &&
