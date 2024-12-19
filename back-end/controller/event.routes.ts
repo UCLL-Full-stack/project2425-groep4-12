@@ -74,11 +74,6 @@ eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
  */
 eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        try {
-            console.log("hello");
-        } catch (logError) {
-            console.error("Logging error:", logError);
-        }
         const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
         const { firstName, lastName, role } = request.auth;
         const events = await eventService.getAllEvents({ firstName, lastName, role });

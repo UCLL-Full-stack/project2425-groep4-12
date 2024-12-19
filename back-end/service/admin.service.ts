@@ -1,8 +1,14 @@
 import { Admin } from '../model/Admin';
 import adminDb from '../repository/admin.db';
+import { Role } from '../types';
 
-const getAllAdmins = async (): Promise<Admin[]> => adminDb.getAllAdmins();
-
+const getAllAdmins = async ({role}: {role: Role}): Promise<Admin[]> => {
+    if (role === 'ADMIN') {
+        return adminDb.getAllAdmins();
+    } else {
+        throw new Error('You are not authorized to access this resource.');
+    }
+};
 const getAdminById = async (id: number): Promise<Admin> => {
     const admin = await adminDb.getAdminById({ id });
     if (!admin) throw new Error(`Admin with id ${id} does not exist.`);
