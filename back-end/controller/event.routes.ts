@@ -1,27 +1,30 @@
-
 import express, { NextFunction, Request, Response } from 'express';
 import eventService from '../service/event.service';
+import { Role } from '../types';
 
 const eventRouter = express.Router();
 
 /**
  * @swagger
  * /events/{id}:
- *  get:
- *      security:
- *      summary: Get a event by id.
- *      parameters:
- *          - in: path
- *            name: id
- *            schema:
- *              type: integer
- *              required: true
- *              description: The event id.
- *      responses:
- *          200:
- *              description: A event object.
- *              content:
- *                  application/json:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get an event by id.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The event id.
+ *     responses:
+ *       200:
+ *         description: An event object.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Event'
  */
 eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -32,11 +35,12 @@ eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
     }
 });
 
-
 /**
  * @swagger
  * /events:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all events
  *     responses:
  *       200:
@@ -46,12 +50,18 @@ eventRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
  *             schema:
  *               type: array
  *               items:
- *                  $ref: '#/components/schemas/Event'
+ *                 $ref: '#/components/schemas/Event'
  */
-
 eventRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const events = await eventService.getAllEvents();
+        try {
+            console.log("hello");
+        } catch (logError) {
+            console.error("Logging error:", logError);
+        }
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { firstName, lastName, role } = request.auth;
+        const events = await eventService.getAllEvents({ firstName, lastName, role });
         res.status(200).json(events);
     } catch (error) {
         next(error);

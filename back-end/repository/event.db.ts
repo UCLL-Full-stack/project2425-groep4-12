@@ -20,6 +20,7 @@ const createEvent = async (event: Event): Promise<Event> => {
     }
 };
 
+
 const getEventById = async ({ id }: { id: number }): Promise<Event | null> => {
     try {
         const eventPrisma = await database.event.findUnique({
@@ -45,8 +46,28 @@ const getAllEvents = async (): Promise<Event[]> => {
     }
 };
 
+const getEventsByTeamId = async ({ id }: { id: number }): Promise<Event[]> => {
+    try {
+        const eventsPrisma = await database.event.findMany({
+            where: {
+                teams: {
+                    some: {
+                        id,
+                    },
+                },
+            },
+            orderBy: { start: 'asc' },
+        });
+        return eventsPrisma.map((eventPrisma) => Event.from(eventPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     createEvent,
     getEventById,
     getAllEvents,
+    getEventsByTeamId,
 };
