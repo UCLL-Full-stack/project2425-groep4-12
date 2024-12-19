@@ -1,24 +1,27 @@
 import { useTranslation } from "next-i18next";
 import { Event, User } from "@types";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 type Props = {
-    events: Array<Event>
-    user: Array<User>
-}
+    events: Event[];
+};
 
-const EventOverview: React.FC<Props> = ({events, user}: Props) => {
+const EventOverview: React.FC<Props> = ({events}) => {
     
+    
+
     return (
         <>
             {events && (
-                <table>
+                <table className="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Hour</th>
-                            <th scope="col">Sports hall</th>
-                            <th scope="col">Square</th>
-                            <th scope="col">Registered</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Desription</th>
+                            <th scope="col">Location</th>
+                            <th scope="col">Starts at:</th>
+                            <th scope="col">Ends at:</th>
                         </tr>
                     </thead>
                     <tbody>

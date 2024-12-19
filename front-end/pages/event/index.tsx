@@ -44,7 +44,7 @@ const EventPage: React.FC = () => {
                 <h1>{t("event.h1")}</h1>
                 <section>
                     {events && (
-                        <EventOverview events={events} user={[]}/>
+                        <EventOverview events={events}/>
                     )}
                 </section>
             </main>
