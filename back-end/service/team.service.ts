@@ -49,8 +49,16 @@ const createTeam = async ({
         const playerEntities = await Promise.all(
             players.map(async (playerInput) => {
                 if (!playerInput.id) throw new Error('Player id is required');
+
                 const player = await playerDb.getPlayerById({ id: playerInput.id });
                 if (!player) throw new Error(`Player with id ${playerInput.id} not found`);
+                
+                const playerId = player.getId();
+                if (playerId === undefined) throw new Error('Player id is required');
+
+                const existingTeam = await teamDb.getTeamsByPlayerId({ playerId });
+                if (existingTeam) throw new Error(`Player with id ${player.getId()} is already in a team`);
+
                 return player;
             })
         );
@@ -65,7 +73,6 @@ const createTeam = async ({
         
 
         if (!coach) throw new Error('Coach not found');
-        if (!players) throw new Error('Players not found');
 
         const existingTeam = await teamDb.getTeamByPlayersAndCoach({
             playerId: players.map((player) => player.id).filter((id): id is number => id !== undefined),
@@ -74,7 +81,7 @@ const createTeam = async ({
 
         if (existingTeam) throw new Error('This team already exists');
 
-        let team = new Team({ name, coach: coachData, players: playerEntities, schedule: events });
+        const team = new Team({ name, coach: coachData, players: playerEntities, schedule: events });
         return await teamDb.createTeam(team);
     } else {
         throw new UnauthorizedError('credentials_required', {
@@ -152,6 +159,8 @@ const deleteTeam = async ({ id, role }: { id: number, role: Role }): Promise<Tea
         });
     }
 };
+
+
 
 
 
