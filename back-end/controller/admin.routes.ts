@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import adminService from '../service/admin.service';
+import { Role } from '../types';
 
 const adminRouter = express.Router();
 
@@ -7,7 +8,8 @@ const adminRouter = express.Router();
  * @swagger
  * /admins:
  *   get:
- *     
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all admins.
  *     responses:
  *       200:
@@ -21,7 +23,9 @@ const adminRouter = express.Router();
  */
 adminRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const admins = await adminService.getAllAdmins();
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { firstName, lastName, role } = request.auth;
+        const admins = await adminService.getAllAdmins({role});
         res.status(200).json(admins);
     } catch (error) {
         next(error);

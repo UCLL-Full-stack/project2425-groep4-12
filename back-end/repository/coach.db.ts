@@ -58,14 +58,17 @@ const getCoachById = async ({ id }: { id: number }): Promise<Coach | null> => {
     }
 };
 
-const getCoachByFirstAndLastName = async ({ firstName, lastName }: { firstName: string; lastName: string; }): Promise<Coach | null> => {
+const getCoachByFirstAndLastName = async ({ firstName, lastName }: { firstName: string; lastName: string; }): Promise<Coach> => {
     try {
         const coachPrisma = await database.coach.findFirst({
             where: { user: { firstName, lastName } },
             include: { user: true, schedule: true },
         });
 
-        return coachPrisma ? Coach.from(coachPrisma) : null;
+        if (!coachPrisma) {
+            throw new Error(`Coach ${firstName + " " + lastName} does not exist.`);
+        }
+        return Coach.from(coachPrisma);
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');

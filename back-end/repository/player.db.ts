@@ -27,6 +27,19 @@ const getAllPlayers = async (): Promise<Player[]> => {
     }
 };
 
+const getPlayerIdByFirstAndLastName = async ({ firstName, lastName } : { firstName: string, lastName: string }): Promise<number> => {
+    try {
+        const playerPrisma = await database.player.findFirst({
+            where: { user: { firstName, lastName } },
+        });
+
+        return playerPrisma ? playerPrisma.id : -1;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 const getPlayerById = async ({ id }: { id: number }): Promise<Player | null> => {
     try {
         const playerPrisma = await database.player.findUnique({
@@ -97,4 +110,5 @@ export default {
     getPlayerById,
     getAllPlayersByCoachName,
     getAllPlayersFromTeamByPlayerName,
+    getPlayerIdByFirstAndLastName,
 };

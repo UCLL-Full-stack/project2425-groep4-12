@@ -146,6 +146,29 @@ const getTeamByPlayersAndCoach = async ({
     }
 }
 
+const getTeamsByPlayerId = async ({ playerId }: { playerId: number }): Promise<Team[]> => {
+    try {
+        const teamsPrisma = await database.team.findMany({
+            where: {
+                players: {
+                    some: {
+                        id: playerId,
+                    },
+                },
+            },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamsPrisma.map((teamPrisma) => Team.from(teamPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createTeam,
     updatePlayersOfTeam,
@@ -153,4 +176,5 @@ export default {
     getTeamById,
     getAllTeamsByCoachName,
     getTeamByPlayersAndCoach,
+    getTeamsByPlayerId,
 };

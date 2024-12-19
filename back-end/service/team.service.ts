@@ -120,4 +120,25 @@ const addPlayersToTeam = async ({
     }
 };
 
-export default { getAllTeams, createTeam, addPlayersToTeam };
+const getAllEventsByPlayer = async ({
+    firstName,
+    lastName,
+    role,
+}: {
+    firstName: string;
+    lastName: string;
+    role: Role;
+}): Promise<Event[]> => {
+    if (role) {
+        const playerId = await playerDb.getPlayerIdByFirstAndLastName({ firstName, lastName });
+        const teams = await teamDb.getTeamsByPlayerId({ playerId });
+        const events = teams.flatMap(team => team.getSchedule());
+        return events;
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
+
+export default { getAllTeams, createTeam, addPlayersToTeam, getAllEventsByPlayer };
