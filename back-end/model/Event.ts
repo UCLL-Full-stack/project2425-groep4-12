@@ -54,6 +54,15 @@ export class Event {
         if (!event.start || !event.end) {
             throw new Error('Start and end date are required');
         }
+        if (event.start < new Date()) {
+            throw new Error('Start date cannot be in the past');
+        }
+        if (event.end < new Date()) {
+            throw new Error('End date cannot be in the past');
+        }
+        if (event.start === event.end) {
+            throw new Error('Start and end date cannot be the same');
+        }
         if (event.start > event.end) {
             throw new Error('Start date cannot be after end date');
         }
