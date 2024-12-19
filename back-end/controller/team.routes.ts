@@ -230,7 +230,28 @@ teamRouter.post('/addPlayers', async (req: Request, res: Response, next: NextFun
     }
 });
 
-
+/**
+ * @swagger
+ * /teams/{id}:
+ *   delete:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Delete a team by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the team to delete.
+ *     responses:
+ *       200:
+ *         description: The deleted team.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Team'
+ */
 teamRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };

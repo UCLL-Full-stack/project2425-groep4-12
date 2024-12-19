@@ -6,6 +6,25 @@ const playerRouter = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Player:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         email:
+ *           type: string
+ *         teamId:
+ *           type: number
+ */
+
+/**
+ * @swagger
  * /players:
  *   get:
  *     security:
