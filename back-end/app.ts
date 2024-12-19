@@ -11,6 +11,7 @@ import { eventRouter } from './controller/event.routes';
 import { teamRouter } from './controller/team.routes';
 import { expressjwt } from 'express-jwt';
 import helmet from 'helmet';
+import { adminRouter } from './controller/admin.routes';
 
 dotenv.config();
 const app = express();
@@ -43,6 +44,7 @@ app.use('/players', playerRouter);
 app.use('/coaches', coachRouter);
 app.use('/events', eventRouter);
 app.use('/teams', teamRouter);
+app.use('/admins', adminRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'TeamTrackr API is running...' });

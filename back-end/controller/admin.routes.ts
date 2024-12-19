@@ -6,6 +6,25 @@ const adminRouter = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Admin:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         email:
+ *           type: string
+ *         role:
+ *           type: string
+ */
+
+/**
+ * @swagger
  * /admins:
  *   get:
  *     security:
@@ -19,7 +38,7 @@ const adminRouter = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                  $ref: '#/components/schemas/admin'
+ *                  $ref: '#/components/schemas/Admin'
  */
 adminRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {

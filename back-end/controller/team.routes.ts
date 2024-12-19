@@ -106,6 +106,19 @@ const teamRouter = express.Router();
  *           type: string
  *         role:
  *           type: string
+ *     Coach:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         email:
+ *           type: string
+ *         rank:
+ *           type: string
  */
 
 /**
@@ -211,6 +224,19 @@ teamRouter.post('/addPlayers', async (req: Request, res: Response, next: NextFun
         const { role } = request.auth;
         const team = <EnrollmentInput>req.body;
         const result = await teamService.addPlayersToTeam({ ...team, role });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+teamRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { role } = request.auth;
+        const id = { id: Number(req.params.id) };
+        const result = await teamService.deleteTeam({...id, role});
         res.status(200).json(result);
     } catch (error) {
         next(error);
