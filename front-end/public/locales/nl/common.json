@@ -6,9 +6,8 @@
     "header": {
         "title": "TeamTracker",
         "homepage": "Home pagina",
-        "training": "Training",
+        "event": "Evenementen",
         "teams": "Teams",
-        "matches": "Wedstrijden",
         "login": "Login",
         "logout": "Log uit",
         "profile": "Profiel"
@@ -31,5 +30,10 @@
         "message": "Er is iets fout gelopen. Probeer opnieuw later.",
         "nameReq": "Naam is vereist",
         "pwdReq": "Wachtwoord is vereist"
+    },
+
+    "event": {
+        "title": "Evenementen",
+        "h1": "Lijst van evenementen"
     }
 }

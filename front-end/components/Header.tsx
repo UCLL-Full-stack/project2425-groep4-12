@@ -29,14 +29,11 @@ const Header: React.FC = () => {
                 <Link href="/" className={styles.card}>
                     {t("header.homepage")}
                 </Link>
-                <Link href="/training" className={styles.card}>
-                    {t("header.training")}
+                <Link href="/event" className={styles.card}>
+                    {t("header.event")}
                 </Link>
                 <Link href="/team" className={styles.card}>
                     {t("header.teams")}
-                </Link>
-                <Link href="/match" className={styles.card}>
-                    {t("header.matches")}
                 </Link>
 
                 {!loggedInUser && (
@@ -49,15 +46,13 @@ const Header: React.FC = () => {
 
                 {loggedInUser && (
                     <>
-                        {/* <Link href="/training" className={styles.card}>
+                        {/* <Link href="/event" className={styles.card}>
                             Trainings
                         </Link>
                         <Link href="/team" className={styles.card}>
                             Teams
                         </Link>
-                        <Link href="/match" className={styles.card}>
-                            Matches
-                        </Link> */}
+                        */}
                                 
                         <a
                             href="#"
