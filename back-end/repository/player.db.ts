@@ -41,8 +41,60 @@ const getPlayerById = async ({ id }: { id: number }): Promise<Player | null> => 
     }
 };
 
+const getAllPlayersByCoachName = async ({ firstName, lastName }: { firstName: string, lastName:string }): Promise<Player[]> => {
+    try {
+        const playersPrisma = await database.player.findMany({
+            where: {
+                teams: {
+                    some: {
+                        coach: {
+                            user: {
+                                firstName,
+                                lastName,
+                            },
+                        },
+                    },
+                },
+            },
+            include: { user: true },
+        });
+        return playersPrisma.map((playerPrisma) => Player.from(playerPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const getAllPlayersFromTeamByPlayerName = async ({ firstName, lastName }: { firstName: string, lastName:string }): Promise<Player[]> => {
+    try {
+        const playersPrisma = await database.player.findMany({
+            where: {
+                teams: {
+                    some: {
+                        players: {
+                            some: {
+                                user: {
+                                    firstName,
+                                    lastName,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+            include: { user: true },
+        });
+        return playersPrisma.map((playerPrisma) => Player.from(playerPrisma));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     createPlayer,
     getAllPlayers,
     getPlayerById,
+    getAllPlayersByCoachName,
+    getAllPlayersFromTeamByPlayerName,
 };

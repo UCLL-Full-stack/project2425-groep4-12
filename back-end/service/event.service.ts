@@ -7,8 +7,9 @@ const getEventById = async (id: number): Promise<Event> => {
     return event;
 };
 
-const getAllEvents = async (): Promise<Event[]> => eventDB.getAllEvents();
+const getAllEvents = async (): Promise<Event[]> => {
+    return eventDB.getAllEvents();
 
-
+};
 
 export default { getEventById, getAllEvents };

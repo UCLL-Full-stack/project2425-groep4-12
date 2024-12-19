@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import coachService from '../service/coach.service';
+import { Role } from '../types';
 
 const coachRouter = express.Router();
 
@@ -7,6 +8,8 @@ const coachRouter = express.Router();
  * @swagger
  * /coaches:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all coaches.
  *     responses:
  *       200:
@@ -20,46 +23,23 @@ const coachRouter = express.Router();
  */
 coachRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const coaches = await coachService.getAllCoaches();
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { firstName, lastName, role } = request.auth;
+        const coaches = await coachService.getAllCoaches({ firstName, lastName, role });
         res.status(200).json(coaches);
     } catch (error) {
         next(error);
     }
 });
 
-/**
- * @swagger
- * /coaches/{id}:
- *  get:
- *      summary: Get a coach by id.
- *      parameters:
- *          - in: path
- *            name: id
- *            schema:
- *              type: integer
- *              required: true
- *              description: The coach id.
- *      responses:
- *          200:
- *              description: A coach object.
- *              content:
- *                  application/json:
- *                      schema:
- *                          $ref: '#/components/schemas/Coach'
- */
-coachRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const coach = await coachService.getCoachById(Number(req.params.id));
-        res.status(200).json(coach);
-    } catch (error) {
-        next(error);
-    }
-});
+
 
 /**
  * @swagger
  * /coaches/promote:
  *   post:
+ *      security:
+ *       - bearerAuth: []
  *      summary: Promote a coach to a higher rank
  *      requestBody:
  *        required: true
@@ -83,7 +63,9 @@ coachRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) 
 
 coachRouter.post('/promote', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const coach = await coachService.promoteCoach({ id: Number(req.body.id), rank: req.body.rank });
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { role } = request.auth;
+        const coach = await coachService.promoteCoach({ id: Number(req.body.id), rank: req.body.rank, role });
         res.status(200).json(coach);
     } catch (error) {
         next(error);

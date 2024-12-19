@@ -12,26 +12,24 @@ import { teamRouter } from './controller/team.routes';
 import { expressjwt } from 'express-jwt';
 import helmet from 'helmet';
 
-
+dotenv.config();
 const app = express();
-app.use(helmet());
+const port = process.env.APP_PORT || 3000;
 
+app.use(helmet());
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
-            // Allow connections to own server and the external API
             connectSrc: ["'self'", 'https://api.ucll.be'],
         },
     })
 );
 
-dotenv.config();
-const port = process.env.APP_PORT || 3000;
-
 app.use(
     expressjwt({
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256'],
+        requestProperty: 'auth',
     }).unless({
         path: ['/api-docs', /^\/api-docs\/.*/, '/users/login', '/users/signup', '/status'],
     })
@@ -73,6 +71,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-app.listen(port || 3000, () => {
+app.listen(port, () => {
     console.log(`TeamTrackrs API is running on port ${port}.`);
 });

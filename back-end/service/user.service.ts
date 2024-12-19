@@ -2,7 +2,7 @@ import userDB from '../repository/user.db';
 import playerService from './player.service';
 import coachService from './coach.service';
 import { User } from '../model/User';
-import { AuthenticationResponse, UserInput } from '../types';
+import { AuthenticationResponse, Role, UserInput } from '../types';
 import { generateJwtToken } from '../util/jwt';
 import bcrypt from 'bcrypt';
 import adminService from './admin.service';
@@ -18,13 +18,15 @@ const getUserByUsername = async ({ firstName, lastName }: { firstName: string; l
     return user;
 };
 
-const createUser = async ({
-    firstName,
-    lastName,
-    email,
-    password,
-    role,
-}: UserInput): Promise<User> => {
+const createUser = async (
+    userInput: UserInput,
+    authRole?: Role
+): Promise<User> => {
+    if (authRole !== 'ADMIN') {
+        throw new Error('You are not authorized to create a user.');
+    }
+
+    const { firstName, lastName, email, password, role } = userInput;
     const existingUser = await userDB.getUserByFirstAndLastname({ firstName, lastName });
 
     if (existingUser) {
@@ -40,7 +42,7 @@ const createUser = async ({
         await playerService.createPlayer(createdUser.getid()!);
     } else if (role === 'COACH') {
         await coachService.createCoach(createdUser.getid()!);
-    }else if (role === 'ADMIN') {
+    } else if (role === 'ADMIN') {
         await adminService.createAdmin(createdUser.getid()!);
     }
 

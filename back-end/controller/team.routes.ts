@@ -14,15 +14,24 @@ const teamRouter = express.Router();
  *         name:
  *           type: string
  *         coach:
- *           $ref: '#/components/schemas/CoachInput'
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: number
  *         players:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/PlayerInput'
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: number
  *         schedule:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/EventInput'
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: number
  *     Team:
  *       type: object
  *       properties:
@@ -31,15 +40,24 @@ const teamRouter = express.Router();
  *         name:
  *           type: string
  *         coach:
- *           $ref: '#/components/schemas/CoachInput'
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: number
  *         players:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/PlayerInput'
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: number
  *         schedule:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/EventInput'
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: number
  *     EnrollmentInput:
  *       type: object
  *       properties:
@@ -48,29 +66,14 @@ const teamRouter = express.Router();
  *         players:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/PlayerInput'
- *     CoachInput:
- *       type: object
- *       properties:
- *         id:
- *           type: number
- *         user:
- *           $ref: '#/components/schemas/UserInput'
- *         rank:
- *           type: string
- *         events:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/EventInput'
- *     PlayerInput:
- *       type: object
- *       properties:
- *         id:
- *           type: number
- *         user:
- *           $ref: '#/components/schemas/UserInput'
- *         playernumber:
- *           type: string
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: number
+ *               user:
+ *                 $ref: '#/components/schemas/UserInput'
+ *               playernumber:
+ *                 type: string
  *     EventInput:
  *       type: object
  *       properties:
@@ -142,8 +145,6 @@ teamRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *        required: true
  *        content:
  *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/TeamInput'
  *            example:
  *              name: "Team A"
  *              coach:
@@ -160,7 +161,16 @@ teamRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *            content:
  *              application/json:
  *                schema:
- *                  $ref: '#/components/schemas/Team'
+ *                  example:
+ *                    name: "Team A"
+ *                    coach:
+ *                      id: 6
+ *                    players:
+ *                      - id: 13
+ *                      - id: 14
+ *                    schedule:
+ *                      - id: 9
+ *                      - id: 10
  */
 teamRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -197,8 +207,10 @@ teamRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  */
 teamRouter.post('/addPlayers', async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { role } = request.auth;
         const team = <EnrollmentInput>req.body;
-        const result = await teamService.addPlayersToTeam(team);
+        const result = await teamService.addPlayersToTeam({ ...team, role });
         res.status(200).json(result);
     } catch (error) {
         next(error);

@@ -77,7 +77,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
-import { UserInput } from '../types/index';
+import { Role, UserInput } from '../types/index';
 
 const userRouter = express.Router();
 
@@ -137,8 +137,6 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     }
 });
 
-
-
 /**
  * @swagger
  * /users/signup:
@@ -161,15 +159,11 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;
-        const user = await userService.createUser(userInput);
+        const user = await userService.createUser(userInput, 'ADMIN'); // Assuming 'ADMIN' role for signup
         res.status(200).json(user);
     } catch (error) {
         next(error);
     }
 });
-
-
-
-
 
 export { userRouter };

@@ -1,22 +1,33 @@
 import { Coach } from '../model/Coach';
 import coachDb from '../repository/coach.db';
+import { Role } from '../types';
 
-const getAllCoaches = async (): Promise<Coach[]> => coachDb.getAllCoaches();
-
-const getCoachById = async (id: number): Promise<Coach> => {
-    const coach = await coachDb.getCoachById({ id });
-    if (!coach) throw new Error(`Coach with id ${id} does not exist.`);
-    return coach;
+const getAllCoaches = async ({ firstName, lastName, role} : {firstName:string; lastName:string; role:Role}): Promise<Coach[]> => {
+    if (role === 'ADMIN') {
+        return coachDb.getAllCoaches();
+    } else if (role === 'COACH') {
+        const coach = await coachDb.getCoachByFirstAndLastName({ firstName, lastName });
+        if (!coach) {
+            throw new Error(`Coach ${firstName + " " + lastName} does not exist.`);
+        }
+        return [coach];
+    } else (role === 'PLAYER') 
+        throw new Error('You are not authorized to access this resource.');
 };
 
-const promoteCoach = async ({ id, rank }: { id: number; rank: string }): Promise<Coach | null> => {
-    const existingCoach = await coachDb.getCoachById({ id });
-    if (!existingCoach) throw new Error(`Coach with id ${id} does not exist.`);
-    const coach = await coachDb.promoteCoach({ id, rank });
-    return coach;
+const promoteCoach = async ({ id, rank, role }: { id: number; rank: string, role: Role }): Promise<Coach | null> => {
+    if (role === 'ADMIN'){
+        const existingCoach = await coachDb.getCoachById({ id });
+        if (!existingCoach) throw new Error(`Coach with id ${id} does not exist.`);
+        const coach = await coachDb.promoteCoach({ id, rank });
+        return coach;
+    } else {
+        throw new Error('You are not authorized to access this resource.');
+    }
 }
+
 const createCoach = async (userId: number): Promise<void> => {
     await coachDb.createCoach(userId);
 };
 
-export default { getAllCoaches, getCoachById, createCoach, promoteCoach };
+export default { getAllCoaches, createCoach, promoteCoach };

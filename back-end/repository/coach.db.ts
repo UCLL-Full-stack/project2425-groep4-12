@@ -58,9 +58,25 @@ const getCoachById = async ({ id }: { id: number }): Promise<Coach | null> => {
     }
 };
 
+const getCoachByFirstAndLastName = async ({ firstName, lastName }: { firstName: string; lastName: string; }): Promise<Coach | null> => {
+    try {
+        const coachPrisma = await database.coach.findFirst({
+            where: { user: { firstName, lastName } },
+            include: { user: true, schedule: true },
+        });
+
+        return coachPrisma ? Coach.from(coachPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+
 export default {
     getAllCoaches,
     createCoach,
     getCoachById,
     promoteCoach,
+    getCoachByFirstAndLastName,
 };

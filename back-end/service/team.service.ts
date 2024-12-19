@@ -86,30 +86,38 @@ const createTeam = async ({
 const addPlayersToTeam = async ({
     team: teamInput,
     players: playersInput,
+    role: role,
 }: {
     team: TeamInput;
     players: PlayerInput[];
+    role: Role;
 }): Promise<Team | null> => {
-    if (!teamInput.id) throw new Error('Schedule id is required');
-    if (!playersInput) throw new Error('At least one pla is required');
+    if (role === 'ADMIN' || role === 'COACH') {
+        if (!teamInput.id) throw new Error('Schedule id is required');
+        if (!playersInput) throw new Error('At least one player is required');
 
-    const team = await teamDb.getTeamById({ id: teamInput.id });
-    if (!team) throw new Error('Schedule not found');
+        const team = await teamDb.getTeamById({ id: teamInput.id });
+        if (!team) throw new Error('Schedule not found');
 
-    const players = await Promise.all(
-        playersInput.map(async (playerInput) => {
-            if (!playerInput.id) throw new Error('Player id is required');
-            const player = await playerDb.getPlayerById({ id: playerInput.id });
-            if (!player) throw new Error(`Player with id ${playerInput.id} not found`);
-            return player;
-        })
-    );
+        const players = await Promise.all(
+            playersInput.map(async (playerInput) => {
+                if (!playerInput.id) throw new Error('Player id is required');
+                const player = await playerDb.getPlayerById({ id: playerInput.id });
+                if (!player) throw new Error(`Player with id ${playerInput.id} not found`);
+                return player;
+            })
+        );
 
-    players.forEach((player) => {
-        team.addPlayerToTeam(player);
-    });
+        players.forEach((player) => {
+            team.addPlayerToTeam(player);
+        });
 
-    return await teamDb.updatePlayersOfTeam({ team });
+        return await teamDb.updatePlayersOfTeam({ team });
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
 };
 
 export default { getAllTeams, createTeam, addPlayersToTeam };
