@@ -264,4 +264,44 @@ teamRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction
     }
 });
 
+/**
+ * @swagger
+ * /teams/removePlayer:
+ *   post:
+ *      security:
+ *       - bearerAuth: []
+ *      summary: Remove a player from a team.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                teamId:
+ *                  type: number
+ *                playerId:
+ *                  type: number
+ *      responses:
+ *         200:
+ *            description: The updated team after removing the player.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/Team'
+ */
+teamRouter.post('/removePlayer', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { role } = request.auth;
+        const { teamId, playerId } = req.body;
+        if (teamId === undefined) throw new Error('Team id is required');
+        if (playerId === undefined) throw new Error('Player id is required');
+        const result = await teamService.removePlayerFromTeam({ teamId, playerId, role });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { teamRouter };

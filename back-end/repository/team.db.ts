@@ -69,16 +69,15 @@ const getAllTeams = async (): Promise<Team[]> => {
     }
 };
 
-
 const getTeamById = async ({ id }: { id: number }): Promise<Team | null> => {
     try {
+        if (id === undefined) throw new Error('Team id is required');
         const teamPrisma = await database.team.findUnique({
             where: { id },
             include: {
                 coach: { include: { user: true, schedule: true } },
                 players: { include: { user: true } },
                 schedule: true,
-                
             },
         });
         return teamPrisma ? Team.from(teamPrisma) : null;
@@ -186,6 +185,28 @@ const deleteTeam = async ({ id }: { id: number }): Promise<Team | null> => {
     }
 };
 
+const deletePlayerFromTeam = async ({ teamId, playerId }: { teamId: number; playerId: number }): Promise<Team | null> => {
+    try {
+        const teamPrisma = await database.team.update({
+            where: { id: teamId },
+            data: {
+                players: {
+                    disconnect: { id: playerId },
+                },
+            },
+            include: {
+                coach: { include: { user: true, schedule: true } },
+                players: { include: { user: true } },
+                schedule: true,
+            },
+        });
+        return teamPrisma ? Team.from(teamPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     createTeam,
     updatePlayersOfTeam,
@@ -195,4 +216,5 @@ export default {
     getTeamByPlayersAndCoach,
     getTeamsByPlayerId,
     deleteTeam,
+    deletePlayerFromTeam,
 };

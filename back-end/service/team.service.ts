@@ -7,6 +7,7 @@ import playerDb from '../repository/player.db';
 import { Role, TeamInput, PlayerInput, CoachInput, EventInput } from '../types';
 import { Team } from '../model/Team';
 import { Event } from '../model/Event';
+import { ro } from 'date-fns/locale';
 
 const getAllTeams = async ({
     firstName,
@@ -162,6 +163,20 @@ const deleteTeam = async ({ id, role }: { id: number, role: Role }): Promise<Tea
 
 
 
+const removePlayerFromTeam = async ({ teamId, playerId, role }: { teamId: number, playerId: number; role: Role }): Promise<Team | null> => {
+    if (role === 'ADMIN') {
+        if (teamId === undefined) throw new Error('Team id is required');
+        if (playerId === undefined) throw new Error('Player id is required');
+        const team = await teamDb.getTeamById({ id: teamId });
+        if (!team) throw new Error(`Team with id ${teamId} does not exist`);
+        const updatedTeam = await teamDb.deletePlayerFromTeam({ teamId, playerId });
+        if (!updatedTeam) throw new Error(`Failed to remove player with id ${playerId} from team with id ${teamId}`);
+        return updatedTeam;
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
 
-
-export default { getAllTeams, createTeam, addPlayersToTeam, getAllEventsByPlayer, deleteTeam };
+export default { getAllTeams, createTeam, addPlayersToTeam, getAllEventsByPlayer, deleteTeam, removePlayerFromTeam };
