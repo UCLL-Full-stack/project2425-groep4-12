@@ -1,0 +1,14 @@
+.hoverRow:hover {
+    background-color: lightgray;
+}
+
+.table th, .table td {
+    width: 33%;
+}
+
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 20px; /* Adjust as needed */
+}

@@ -9,10 +9,18 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { Team } from "@types";
 import TeamOverview from "@components/team/TeamOverview";
+import TeamService from "@services/TeamService";
 
 const TeamPage: React.FC = () => {
     
     const [teams, setTeams] = useState<Array<Team>>();
+
+    useEffect(() => {
+        TeamService.getAllTeams()
+            .then(response => response.json())
+            .then(data => setTeams(data))
+            .catch(error => console.error("Error fetching teams:", error));
+    }, []);
 
     return (
         <>
@@ -24,7 +32,7 @@ const TeamPage: React.FC = () => {
                 <h1>List of teams</h1>
                 <section>
                     {teams && (
-                        <TeamOverview teams={teams}/>
+                        <TeamOverview teams={teams} setTeams={setTeams}/>
                     )}
                 </section>
             </main>

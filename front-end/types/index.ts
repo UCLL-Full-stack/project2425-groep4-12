@@ -1,12 +1,25 @@
-export type Role = "Admin" | "Coach" | "Player" | "Guest"
+export type Role = "ADMIN" | "COACH" | "PLAYER";
 
-export interface User {
-    userId?: number;
+export type User = {
+    id?: number;
     firstName: string;
     lastName: string;
+    email: string;
     password: string;
-    role?: Role;
-    attendance?: number;
+    role: Role;
+}
+
+export type Coach = {
+    id?: number;
+    user: User;
+    rank: string;
+    events: Event[];
+}
+
+export type Player = {
+    id?: number;
+    user: User;
+    playernumber: string;
 }
 
 export type Event = {
@@ -19,9 +32,23 @@ export type Event = {
 }
 
 export type Team = {
-    teamId?: number;
-    members?: Array<User>;
-    coach: User;
+    id: number;
+    name: string;
+    coach: Coach;
+    players: Player[];
+    schedule: Event[];
+}
+
+export type AuthenticationResponse = {
+    token: string;
+    firstName: string;
+    lastName: string;
+    role: string;
+}
+
+export type Enrollment = {
+    team: Team;
+    players: Player[];
 }
 
 export type StatusMessage = {
