@@ -14,20 +14,26 @@ type Props = {
   events: Event[];
 }
 
-const LocalEventOverview: React.FC<Props> = ({ events }) => {
-  return (
-    <>
-      {events.map((event) => (
-        <div key={event.id}>{event.name}</div>
-      ))}
-    </>
-  );
-};
-
 const EventPage: React.FC = () => {
   const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
+
+  const fetchEvents = async () => {
+    try {
+      const response = await EventService.getAllEvents();
+      const data = await response.json();
+      setEvents(data);
+    } catch (err) {
+      setError(t("event.error"));
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  useInterval(fetchEvents, 5000);
 
   return (
     <>
@@ -44,7 +50,7 @@ const EventPage: React.FC = () => {
             <p className="text-red-600 text-center">{error}</p>
           )}
           {events.length > 0 ? (
-            <LocalEventOverview events={events} />
+            <EventOverview events={events} />
           ) : (
             <p className="text-gray-600 text-center mt-4">
               {t("event.noEvents")}
