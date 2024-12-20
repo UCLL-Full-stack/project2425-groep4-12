@@ -13,11 +13,12 @@ const main = async () => {
   await prisma.user.deleteMany();
 
   // Encrypt passwords
-  const hashedPasswordChris = await bcrypt.hash('password', 12);
+  const hashedPasswordChris = await bcrypt.hash('chris123', 12);
   const hashedPasswordJohn = await bcrypt.hash('password', 12);
   const hashedPasswordJane = await bcrypt.hash('password', 12);
   const hashedPasswordAlice = await bcrypt.hash('password', 12);
-  const hashedPasswordAdrie = await bcrypt.hash('password', 12);
+  const hashedPasswordAdrie = await bcrypt.hash('adrie123', 12);
+  const hashedPasswordPascal = await bcrypt.hash('pascal123', 12);
 
   // Create users
   const ChrisUser = await prisma.user.create({
@@ -27,6 +28,16 @@ const main = async () => {
       email: 'chris@example.com',
       password: hashedPasswordChris,
       role: 'COACH',
+    },
+  });
+
+  const PascalUser = await prisma.user.create({
+    data: {
+      firstName: 'Pascal',
+      lastName: 'Doe',
+      email: 'pascal@example.com',
+      password: hashedPasswordPascal,
+      role: 'PLAYER',
     },
   });
 
@@ -108,8 +119,17 @@ const main = async () => {
     },
   });
 
+  const Pascal = await prisma.player.create({
+    data: {
+      playernumber: '13',
+      user: {
+        connect: { id: PascalUser.id },
+      },
+    },
+  });
+
   // Create admin
-  const AdrieAdmin = await prisma.admin.create({
+  const Adrie = await prisma.admin.create({
     data: {
       user: {
         connect: { id: AdrieUser.id },
@@ -126,7 +146,7 @@ const main = async () => {
       },
       players: {
         connect: [
-          { id: John.id },
+          { id: Pascal.id },
           { id: Jane.id },
           { id: Alice.id },
         ],
