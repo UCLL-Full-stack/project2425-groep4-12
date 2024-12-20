@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 import { useTranslation } from "next-i18next";
 import { Event } from "@types";
 import React, { useState } from 'react';
+=======
+import React from 'react';
+import { Event } from "@types";
+>>>>>>> 003087cc88c659ba8bc5181a7167c805a9e266ad
 import { useRouter } from 'next/router';
 import EventService from "@services/EventService";
 
@@ -26,6 +31,11 @@ const EventOverview: React.FC<{ events: Event[]; refreshEvents: () => void }> = 
     }
   };
 
+<<<<<<< HEAD
+=======
+const EventOverview: React.FC<{ events: Event[] }> = ({ events }) => {
+
+>>>>>>> 003087cc88c659ba8bc5181a7167c805a9e266ad
   return (
     <>
       {events && (

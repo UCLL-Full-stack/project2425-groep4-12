@@ -15,7 +15,8 @@
 
     "login": {
         "title": "Login",
-        "username": "Username:",
+        "firstname": "First name:",
+        "lastname": "Last name:",
         "password": "Password:",
         "submit": "Log in"
     },
@@ -34,6 +35,8 @@
 
     "event": {
         "title": "Events",
-        "h1": "List of events"
+        "h1": "List of events",
+        "error": "Something went wrong, please try again later",
+        "noEvents": "No events found"
     }
 }
