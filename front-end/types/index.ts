@@ -9,7 +9,7 @@ export interface User {
 }
 
 export type Event = {
-    eventId?: number;
+    id?: number;
     name: string;
     description: string;
     location: string;

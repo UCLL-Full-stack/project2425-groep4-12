@@ -2,12 +2,31 @@ import { useTranslation } from "next-i18next";
 import { Event } from "@types";
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import EventService from "@services/EventService";
 
-type Props = {
-    events: Event[];
-};
 
-const EventOverview: React.FC<Props> = ({events}) => {
+
+const EventOverview: React.FC = () => {
+
+  const [events, setEvents] = useState<Array<Event>>([]);
+  const [error, setError] = useState<string | null>(null);
+
+
+  const getAllEvents = async () => {
+    const responses = await Promise.all([
+        EventService.getAllEvents()
+    ]);
+
+    setEvents(await responses[0].json());
+    
+  };
+
+
+  useEffect(() => {
+    getAllEvents();
+  }, []);
+
+  setInterval(getAllEvents, 5000);
     
     return (
         <>

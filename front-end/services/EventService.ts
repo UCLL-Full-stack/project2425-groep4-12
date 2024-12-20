@@ -1,19 +1,23 @@
 import { Event, User } from "@types";
 
 const getAllEvents = () => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        }
-    })
-};
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
 
 const getEventById = (eventId: (string)) => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${eventId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            
         }
     })
 };
