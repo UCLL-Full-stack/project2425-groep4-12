@@ -24,13 +24,10 @@ const EventPage: React.FC = () => {
     }
 
     useEffect(() => {
-        // if (sessionStorage.getItem("loggedInUser") === null) {
-        //     window.location.href="/401"
-        // }
         getEvents()
     }, [])
 
-    useInterval(getEvents, 50000)
+    useInterval(getEvents, 5000)
 
     return (
         <>
