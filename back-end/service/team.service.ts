@@ -172,6 +172,17 @@ const deleteTeam = async ({ id, role }: { id: number, role: Role }): Promise<Tea
     }
 };
 
+const getTeamById = async ({ id, role }: { id: number, role: Role }): Promise<Team | null> => {
+
+    if (role) {
+        if (id === undefined) throw new Error('Team id is required');
+        return teamDb.getTeamById({ id });
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+}
 
 
 const removePlayerFromTeam = async ({ teamId, playerId, role }: { teamId: number, playerId: number; role: Role }): Promise<Team | null> => {
@@ -242,5 +253,7 @@ export default {
     removePlayerFromTeam, 
     addEventToTeamSchedule, 
     removeEventFromTeamSchedule,
-    getAllEventsByCoach // Add this line
+    getAllEventsByCoach,
+    getTeamById
+
 };

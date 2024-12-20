@@ -383,4 +383,38 @@ teamRouter.post('/removeEvent', async (req: Request, res: Response, next: NextFu
     }
 });
 
+/**
+ * @swagger
+ * /teams/{id}:
+ *   get:
+ *     security:
+ *       - bearerAuth: []
+ *     summary: Get a team by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the team to retrieve.
+ *     responses:
+ *       200:
+ *         description: The team with the specified ID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Team'
+ */
+teamRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
+        const { role } = request.auth;
+        const { id } = req.body;
+        const result = await teamService.getTeamById({ id, role });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export { teamRouter };
