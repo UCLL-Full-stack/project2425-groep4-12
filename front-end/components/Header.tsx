@@ -31,12 +31,12 @@ const Header: React.FC = () => {
                     {t("header.homepage")}
                 </Link>
                 
-                {/* <Link href="/event">
+                <Link href="/event">
                     {t("header.event")}
                 </Link>
                 <Link href="/team">
                     {t("header.teams")}
-                </Link> */}
+                </Link>
 
                 {!loggedInUser && (
                     <Link
