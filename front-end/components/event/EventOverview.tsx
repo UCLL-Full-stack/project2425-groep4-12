@@ -9,8 +9,6 @@ type Props = {
 
 const EventOverview: React.FC<Props> = ({events}) => {
     
-
-
     return (
         <>
             {events && (

@@ -16,13 +16,13 @@ const Language: React.FC = () => {
     };
 
     return (
-        <a className={styles.card}>
+        <a>
             <label htmlFor="language">
                 {t("language.language")}
             </label>
             <select
                 id="language"
-                className={styles.lang_select}
+                className={styles.button2}
                 value={locale}
                 onChange={handleLanguageChange}
             >

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "../styles/home.module.css"
 import { useTranslation } from "next-i18next";
+import Language from "./language";
 
 const Header: React.FC = () => {
 
@@ -26,30 +27,30 @@ const Header: React.FC = () => {
             </a>
 
             <nav className={styles.nav}>
-                <Link href="/" className={styles.card}>
+                <Link href="/">
                     {t("header.homepage")}
                 </Link>
-                <Link href="/event" className={styles.card}>
+                <Link href="/event">
                     {t("header.event")}
                 </Link>
-                <Link href="/team" className={styles.card}>
+                <Link href="/team">
                     {t("header.teams")}
                 </Link>
 
                 {!loggedInUser && (
                     <Link
                         href="/login"
-                        className={styles.card}>
+                    >
                         {t("header.login")}
                     </Link>
                 )}
 
                 {loggedInUser && (
                     <>
-                        {/* <Link href="/event" className={styles.card}>
+                        {/* <Link href="/event">
                             Trainings
                         </Link>
-                        <Link href="/team" className={styles.card}>
+                        <Link href="/team">
                             Teams
                         </Link>
                         */}
@@ -57,15 +58,17 @@ const Header: React.FC = () => {
                         <a
                             href="#"
                             onClick={handleClick}
-                            className={styles.card}
-                        > {t("header.logout")} </a>
+                        > 
+                            {t("header.logout")}
+                        </a>
                         <a
                             href="/user"
-                            className={styles.card}
-                        > {t("header.profile")} </a>
+                        >
+                            {t("header.profile")}
+                        </a>
                     </>
                 )}
-
+                <Language/>
             </nav>
         </header>
     )
