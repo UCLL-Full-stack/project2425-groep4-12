@@ -15,17 +15,16 @@ const getAllEvents = async ({firstName, lastName, role}: {firstName:string, last
     if (role === 'ADMIN') {
         return eventDB.getAllEvents();
     } else if (role === 'COACH') {
-        const coach = coachDb.getCoachByFirstAndLastName({ firstName, lastName });
+        const coach = await coachDb.getCoachByFirstAndLastName({ firstName, lastName });
         if (!coach) {
             throw new Error(`Coach ${firstName + " " + lastName} does not exist.`);
         }
-        return (await coach).getSchedule();
+        return teamService.getAllEventsByCoach({ firstName, lastName, role });
     } else if (role === 'PLAYER') {
         return teamService.getAllEventsByPlayer({ firstName, lastName, role });
     } else {
         throw new Error('You are not authorized to access this resource.');
     }
-
 };
 
 const createEvent = async (event: Event): Promise<Event> => {

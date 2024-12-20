@@ -140,6 +140,26 @@ const getAllEventsByPlayer = async ({
     }
 };
 
+const getAllEventsByCoach = async ({
+    firstName,
+    lastName,
+    role,
+}: {
+    firstName: string;
+    lastName: string;
+    role: Role;
+}): Promise<Event[]> => {
+    if (role) {
+        const teams = await teamDb.getTeamsByCoachFirstAndLastName( { firstName, lastName });
+        const events = teams.flatMap(team => team.getSchedule());
+        return events;
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
+
 const deleteTeam = async ({ id, role }: { id: number, role: Role }): Promise<Team | null> => {
     if (role === 'ADMIN') {
         const team = await teamDb.getTeamById({ id });
@@ -171,7 +191,7 @@ const removePlayerFromTeam = async ({ teamId, playerId, role }: { teamId: number
 };
 
 const addEventToTeamSchedule = async ({ teamId, event, role }: { teamId: number, event: EventInput; role: Role }): Promise<Team | null> => {
-    if (role === 'COACH') {
+    if (role === 'COACH' || role === 'ADMIN') {
         if (teamId === undefined) throw new Error('Team id is required');
 
         const team = await teamDb.getTeamById({ id: teamId });
@@ -213,4 +233,14 @@ const removeEventFromTeamSchedule = async ({ teamId, eventId, role }: { teamId: 
     }
 }
 
-export default { getAllTeams, createTeam, addPlayersToTeam, getAllEventsByPlayer, deleteTeam, removePlayerFromTeam, addEventToTeamSchedule, removeEventFromTeamSchedule };
+export default { 
+    getAllTeams, 
+    createTeam, 
+    addPlayersToTeam, 
+    getAllEventsByPlayer, 
+    deleteTeam, 
+    removePlayerFromTeam, 
+    addEventToTeamSchedule, 
+    removeEventFromTeamSchedule,
+    getAllEventsByCoach // Add this line
+};
