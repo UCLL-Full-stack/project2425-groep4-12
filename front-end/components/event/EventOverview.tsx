@@ -1,12 +1,12 @@
-import { useTranslation } from "next-i18next";
-import { Event } from "@types";
 import React from 'react';
+import { Event } from "@types";
 import { useRouter } from 'next/router';
 import EventService from "@services/EventService";
 
 
 
 const EventOverview: React.FC<{ events: Event[] }> = ({ events }) => {
+
   return (
     <>
       {events && (

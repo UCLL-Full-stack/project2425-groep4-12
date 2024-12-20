@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import { Team } from "@types";
+import TeamOverview from "@components/team/TeamOverview";
 
 const TeamPage: React.FC = () => {
     
@@ -15,7 +16,18 @@ const TeamPage: React.FC = () => {
 
     return (
         <>
+            <Head>
+                <title>Teams</title>
+            </Head>
             <Header />
+            <main>
+                <h1>List of teams</h1>
+                <section>
+                    {teams && (
+                        <TeamOverview teams={teams}/>
+                    )}
+                </section>
+            </main>
         </>
     )
 }

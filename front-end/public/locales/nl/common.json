@@ -15,7 +15,8 @@
 
     "login": {
         "title": "Login",
-        "username": "Gebruikersnaam:",
+        "firstname": "Voornaam:",
+        "lastname": "Achternaam:",
         "password": "Wachtwoord:",
         "submit": "Log in"
     },
@@ -34,6 +35,8 @@
 
     "event": {
         "title": "Evenementen",
-        "h1": "Lijst van evenementen"
+        "h1": "Lijst van evenementen",
+        "error": "Er is iets mis gegaan, probeer later opnieuw",
+        "noEvents": "Geen evenementen gevonden"
     }
 }

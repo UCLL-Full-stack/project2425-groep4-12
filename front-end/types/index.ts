@@ -2,7 +2,8 @@ export type Role = "Admin" | "Coach" | "Player" | "Guest"
 
 export interface User {
     userId?: number;
-    username: string;
+    firstName: string;
+    lastName: string;
     password: string;
     role?: Role;
     attendance?: number;
