@@ -18,10 +18,10 @@ export default function Home() {
             <Header/>
             <main>
                 <div>
-                    <h1>
+                    <h1 className={styles.subtitle}>
                         {t("home.h1")}
                     </h1>
-                    <p>
+                    <p className={styles.subtext}>
                         {t("home.welcome")}
                     </p>
                 </div>

@@ -29,7 +29,7 @@ const TeamPage: React.FC = () => {
             </Head>
             <Header />
             <main>
-                <h1>List of teams</h1>
+                <h1 className={styles.subtitle}>List of teams</h1>
                 <section>
                     {teams && (
                         <TeamOverview teams={teams} setTeams={setTeams}/>

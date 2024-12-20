@@ -10,6 +10,8 @@ import { Event } from "@types";
 import EventOverview from "@components/event/EventOverview";
 import EventService from "@services/EventService";
 
+import styles from '@styles/home.module.css';
+
 type Props = {
   events: Event[];
 }
@@ -42,17 +44,17 @@ const EventPage: React.FC = () => {
       </Head>
       <Header />
       <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
-        <h1 className="center-text text-2xl font-bold mt-8">
+        <h1 className={styles.subtitle}>
           {t("event.h1")}
         </h1>
         <section className="w-full max-w-4xl mt-6">
           {error && (
-            <p className="text-red-600 text-center">{error}</p>
+            <p className={styles.subtext}>{error}</p>
           )}
           {events.length > 0 ? (
             <EventOverview events={events} refreshEvents={fetchEvents} />
           ) : (
-            <p className="text-gray-600 text-center mt-4">
+            <p className={styles.subtext}>
               {t("event.noEvents")}
             </p>
           )}

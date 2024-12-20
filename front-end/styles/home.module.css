@@ -26,8 +26,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 50px;
+    font-size: 4rem;
     font-weight: 800;
+}
+
+.subtext {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 500;
 }
 
 .nav {
