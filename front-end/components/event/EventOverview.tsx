@@ -26,6 +26,16 @@ const EventOverview: React.FC<{ events: Event[]; refreshEvents: () => void }> = 
     }
   };
 
+  const handleRemoveEvent = async (teamId: number, eventId: number) => {
+    try {
+      console.log("Removing event:", { teamId, eventId });
+      await EventService.removeEvent(teamId, eventId);
+      console.log("Event removed successfully:", eventId);
+      refreshEvents();
+    } catch (error) {
+      console.error("Failed to remove event:", error);
+    }
+  };
 
   return (
     <>
@@ -51,7 +61,7 @@ const EventOverview: React.FC<{ events: Event[]; refreshEvents: () => void }> = 
                   <td style={{ textAlign: 'left' }}>{event.start.toString()}</td>
                   <td style={{ textAlign: 'left' }}>{event.end.toString()}</td>
                   <td style={{ textAlign: 'center' }}>
-                    <button className="bg-red-500 text-white font-bold py-1 px-2 rounded">
+                    <button className="bg-red-500 text-white font-bold py-1 px-2 rounded" onClick={() => teamId && event.id && handleRemoveEvent(teamId, event.id)}>
                       Remove
                     </button>
                   </td>

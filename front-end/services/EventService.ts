@@ -32,9 +32,30 @@ const addEvent = async (teamId: number, event: Event) => {
   return response.json();
 };
 
+const removeEvent = async (teamId: number, eventId: number) => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const token = loggedInUser ? JSON.parse(loggedInUser).token : null;
+    console.log("Removing event:", { teamId, eventId });
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/teams/removeEvent", {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ teamId, eventId }),
+    });
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Failed to remove event:", errorText);
+        throw new Error("Failed to remove event");
+    }
+    return response.json();
+    }
+
 const EventService = {
   getAllEvents,
   addEvent,
+  removeEvent,
 };
 
 export default EventService;
