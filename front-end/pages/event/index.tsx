@@ -38,11 +38,11 @@ const EventPage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>{t("event.title")}</title>
+        <title className="">{t("event.title")}</title>
       </Head>
       <Header />
       <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
-        <h1 className={`text-center text-2xl font-bold mt-8`}>
+        <h1 className="center-text text-2xl font-bold mt-8">
           {t("event.h1")}
         </h1>
         <section className="w-full max-w-4xl mt-6">
@@ -50,7 +50,7 @@ const EventPage: React.FC = () => {
             <p className="text-red-600 text-center">{error}</p>
           )}
           {events.length > 0 ? (
-            <EventOverview events={events} />
+            <EventOverview events={events} refreshEvents={fetchEvents} />
           ) : (
             <p className="text-gray-600 text-center mt-4">
               {t("event.noEvents")}

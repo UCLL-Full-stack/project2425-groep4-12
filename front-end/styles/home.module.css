@@ -96,3 +96,12 @@
     color: red;
     list-style: none;
 }
+
+.center-text {
+    text-align: center;
+}
+
+.center-table {
+    display: flex;
+    justify-content: center;
+}
