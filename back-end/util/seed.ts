@@ -138,7 +138,7 @@ const main = async () => {
   });
 
   // Create a team with the coach and players
-  const team = await prisma.team.create({
+  const teamA = await prisma.team.create({
     data: {
       name: 'Team A',
       coach: {
@@ -154,6 +154,21 @@ const main = async () => {
     },
   });
 
+  // Create another team called FC Ham with the same coach
+  const fcHam = await prisma.team.create({
+    data: {
+      name: 'FC Ham',
+      coach: {
+        connect: { id: Chris.id },
+      },
+      players: {
+        connect: [
+          { id: John.id },
+        ],
+      },
+    },
+  });
+
   // Create events and associate them with the team
   const event1 = await prisma.event.create({
     data: {
@@ -163,7 +178,7 @@ const main = async () => {
       start: new Date('2024-01-01T10:00:00Z'),
       end: new Date('2024-01-01T12:00:00Z'),
       teams: {
-        connect: { id: team.id },
+        connect: { id: teamA.id },
       },
     },
   });
@@ -176,14 +191,14 @@ const main = async () => {
       start: new Date('2024-01-15T14:00:00Z'),
       end: new Date('2024-01-15T16:00:00Z'),
       teams: {
-        connect: { id: team.id },
+        connect: { id: teamA.id },
       },
     },
   });
 
   // Update the team to include the events in the schedule
   await prisma.team.update({
-    where: { id: team.id },
+    where: { id: teamA.id },
     data: {
       schedule: {
         connect: [
@@ -197,7 +212,7 @@ const main = async () => {
   // Update the coach with the teamId
   await prisma.coach.update({
     where: { id: Chris.id },
-    data: { teams: { connect: { id: team.id } } },
+    data: { teams: { connect: [{ id: teamA.id }, { id: fcHam.id }] } },
   });
 };
 
