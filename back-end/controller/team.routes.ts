@@ -409,7 +409,7 @@ teamRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
     try {
         const request = req as Request & { auth: { firstName: string; lastName: string; role: Role } };
         const { role } = request.auth;
-        const { id } = req.body;
+        const id = Number(req.params.id);
         const result = await teamService.getTeamById({ id, role });
         res.status(200).json(result);
     } catch (error) {

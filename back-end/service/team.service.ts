@@ -228,8 +228,6 @@ const addEventToTeamSchedule = async ({ teamId, event, role }: { teamId: number,
 
 const removeEventFromTeamSchedule = async ({ teamId, eventId, role }: { teamId: number, eventId: number; role: Role }): Promise<Team | null> => {
     if (role === 'COACH') {
-        if (teamId === undefined) throw new Error('Team id is required');
-        if (eventId === undefined) throw new Error('Event id is required');
 
         const team = await teamDb.getTeamById({ id: teamId });
         if (!team) throw new Error(`Team with id ${teamId} does not exist`);
