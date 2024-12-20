@@ -4,7 +4,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const logInUser = (user: User) => {
 
-    return fetch (baseUrl + "/login", {
+    return fetch (process.env.NEXT_PUBLIC_API_URL + "/login", {
         method: "POST",
         headers: {
             "Content-Type": "Application/json"

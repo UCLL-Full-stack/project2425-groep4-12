@@ -38,7 +38,7 @@ const EventPage: React.FC = () => {
             </Head>
             <Header />
             <main>
-                <h1>{t("event.h1")}</h1>
+                <h1 className={styles.subtitle}>{t("event.h1")}</h1>
                 <section>
                     {events && (
                         <EventOverview events={events}/>

@@ -42,7 +42,12 @@ const UserLoginForm: React.FC = () => {
 
         try {
 
-            const user = {username: name, password, role: role};
+            const user = {
+                username: name,
+                password,
+                role: role
+            };
+            
             const response = await LoginService.logInUser(user);
             const data = await response.json();
 
@@ -81,29 +86,12 @@ const UserLoginForm: React.FC = () => {
 
     return (
         <>
-            {statusMessages && (
-                <div className="row">
-                    <ul className={styles.errorMessage}>
-                        {statusMessages.map(({message, type}, index) => (
-                            <li
-                                key = {index}
-                                className={classNames({
-                                    "text-red-800": type === "error",
-                                    "text-green-800": type === "success"
-                                })}>
-                                {message}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-
-            <form onSubmit={handleSubmit} className={styles.description_b}>
+            <form onSubmit={handleSubmit} className={styles.loginForm}>
                 <label
-                    htmlFor="nameInput" className={styles.pad}>
+                    htmlFor="nameInput" className={styles.label}>
                     {t("login.username")}
                     </label>
-                    <div className={styles.pad}>
+                    <div className="p-2">
                         <input
                             id = "nameInput"
                             type = "text"
@@ -116,7 +104,7 @@ const UserLoginForm: React.FC = () => {
                         )}
                     </div>
                 <label
-                    htmlFor="passwordInput" className={styles.pad}>
+                    htmlFor="passwordInput" className={styles.label}>
                     {t("login.password")}
                     </label>
                     <div className={styles.pad}>
@@ -136,6 +124,23 @@ const UserLoginForm: React.FC = () => {
                         {t("login.submit")}
                     </button>
             </form>
+
+            {statusMessages && (
+                <div className="row">
+                    <ul className={styles.errorMessage}>
+                        {statusMessages.map(({message, type}, index) => (
+                            <li
+                                key = {index}
+                                className={classNames({
+                                    "text-red-800": type === "error",
+                                    "text-green-800": type === "success"
+                                })}>
+                                {message}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </>
     )
 }

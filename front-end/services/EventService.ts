@@ -1,7 +1,7 @@
 import { Event, User } from "@types";
 
 const getAllEvents = () => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/event", {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -10,7 +10,7 @@ const getAllEvents = () => {
 };
 
 const getEventById = (eventId: (string)) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + `/event/${eventId}`, {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/events/${eventId}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -19,7 +19,7 @@ const getEventById = (eventId: (string)) => {
 };
 
 const createEvent = (event: Event) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/event", {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
         method: "POST",
 
         headers: {
@@ -30,7 +30,7 @@ const createEvent = (event: Event) => {
 }
 
 const registerEvent = (eventId: (string), user: User) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/event", {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/events", {
         method: "POST",
 
         headers: {

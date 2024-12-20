@@ -21,6 +21,15 @@
     border-radius: 3rem;
 }
 
+.subtitle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    font-weight: 800;
+}
+
 .nav {
     display: flex;
     flex-direction: row;
@@ -39,4 +48,43 @@
 .nav a:hover {
     background-color: rgb(255, 230, 0);
     color: black;
+}
+
+.loginForm {
+    margin: 1rem 0rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    width: 100%;
+}
+
+.label {
+    margin-top: 1rem;
+}
+
+.inputbox {
+    border: solid 2px black;
+    width: 20rem;
+    height: 2rem;
+    font-size: 1.5rem;
+    border-radius: 0.3rem;
+}
+
+.button {
+    color: black;
+    font-size: 1.5rem;
+    margin: 1rem;
+    height: 2.3rem;
+    width: 8rem;
+}
+
+.errorMessage {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1.5rem;
+    color: red;
+    list-style: none;
 }
