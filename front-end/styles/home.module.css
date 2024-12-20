@@ -105,3 +105,24 @@
     display: flex;
     justify-content: center;
 }
+
+.tableDiv {
+    display: flex;
+    justify-content: center;
+}
+
+.userTable {
+    display: table;
+    width: 40%;
+    border-collapse: collapse;
+}
+
+.userTable th, .userTable td {
+    border: 1px solid gray;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.userTable thead {
+    font-weight: bold;
+}

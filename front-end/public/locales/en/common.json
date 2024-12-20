@@ -1,6 +1,8 @@
 {
     "home":{
-        "title": "TeamTracker"
+        "title": "TeamTracker",
+        "h1": "Welcome to TeamTracker!",
+        "welcome": "TeamTracker is a personal manager for your sports activities and sports team."
     },
 
     "header": {
@@ -21,7 +23,13 @@
         "submit": "Log in",
         "success": "Successfully logged in!",
         "error": "Something went wrong, please try again later",
-        "incorrect": "Incorrect credentials!"
+        "incorrect": "Incorrect credentials!",
+        "table": {
+            "firstname": "First name:",
+            "lastname": "Last name:",
+            "password": "Password:",
+            "role": "Role:"
+        }
     },
 
     "language": {

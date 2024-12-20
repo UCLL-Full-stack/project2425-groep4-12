@@ -1,6 +1,8 @@
 {
     "home": {
-        "title": "TeamTracker"
+        "title": "TeamTracker",
+        "h1": "Welkom bij TeamTracker!",
+        "welcome": "TeamTracker is jouw persoonlijke beheerder voor jouw sportieve activiteiten en sport-team."
     },
 
     "header": {
@@ -21,7 +23,13 @@
         "submit": "Log in",
         "success": "Inloggen is gelukt!",
         "error": "Er is iets mis gegaan, probeer opnieuw later",
-        "incorrect": "Foute gegevens!"
+        "incorrect": "Foute gegevens!",
+        "table": {
+            "firstname": "Voornaam:",
+            "lastname": "Achternaam:",
+            "password": "Wachtwoord:",
+            "role": "Rol:"
+        }
     },
 
     "language": {

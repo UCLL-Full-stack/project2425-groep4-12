@@ -17,7 +17,14 @@ export default function Home() {
             </Head>
             <Header/>
             <main>
-
+                <div>
+                    <h1>
+                        {t("home.h1")}
+                    </h1>
+                    <p>
+                        {t("home.welcome")}
+                    </p>
+                </div>
             </main>
         </>
     )
