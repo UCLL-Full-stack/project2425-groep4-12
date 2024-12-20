@@ -18,7 +18,10 @@
         "firstname": "First name:",
         "lastname": "Last name:",
         "password": "Password:",
-        "submit": "Log in"
+        "submit": "Log in",
+        "success": "Successfully logged in!",
+        "error": "Something went wrong, please try again later",
+        "incorrect": "Incorrect credentials!"
     },
 
     "language": {
@@ -28,7 +31,7 @@
     },
 
     "error": {
-        "message": "An unknown error has occured. Please try again later.",
+        "message": "Something went wrong, please try again later",
         "nameReq": "Name is required",
         "pwdReq": "Password is required"
     },

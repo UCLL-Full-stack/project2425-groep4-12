@@ -14,7 +14,7 @@ const Header: React.FC = () => {
         setLoggedInUser(sessionStorage.getItem("loggedInUser"));
     }, []);
 
-    const handleClick = () => {
+    const handleLogout = () => {
         sessionStorage.removeItem("loggedInUser");
         setLoggedInUser(null);
         window.location.href="/"
@@ -30,12 +30,13 @@ const Header: React.FC = () => {
                 <Link href="/">
                     {t("header.homepage")}
                 </Link>
-                <Link href="/event">
+                
+                {/* <Link href="/event">
                     {t("header.event")}
                 </Link>
                 <Link href="/team">
                     {t("header.teams")}
-                </Link>
+                </Link> */}
 
                 {!loggedInUser && (
                     <Link
@@ -47,17 +48,16 @@ const Header: React.FC = () => {
 
                 {loggedInUser && (
                     <>
-                        {/* <Link href="/event">
-                            Trainings
+                        <Link href="/event">
+                            {t("header.event")}
                         </Link>
                         <Link href="/team">
-                            Teams
+                            {t("header.teams")}
                         </Link>
-                        */}
                                 
                         <a
                             href="#"
-                            onClick={handleClick}
+                            onClick={handleLogout}
                         > 
                             {t("header.logout")}
                         </a>

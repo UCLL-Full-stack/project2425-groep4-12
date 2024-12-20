@@ -18,7 +18,10 @@
         "firstname": "Voornaam:",
         "lastname": "Achternaam:",
         "password": "Wachtwoord:",
-        "submit": "Log in"
+        "submit": "Log in",
+        "success": "Inloggen is gelukt!",
+        "error": "Er is iets mis gegaan, probeer opnieuw later",
+        "incorrect": "Foute gegevens!"
     },
 
     "language": {
@@ -28,7 +31,7 @@
     },
     
     "error": {
-        "message": "Er is iets fout gelopen. Probeer opnieuw later.",
+        "message": "Er is iets mis gegaan, probeer opnieuw later",
         "nameReq": "Naam is vereist",
         "pwdReq": "Wachtwoord is vereist"
     },
@@ -36,7 +39,7 @@
     "event": {
         "title": "Evenementen",
         "h1": "Lijst van evenementen",
-        "error": "Er is iets mis gegaan, probeer later opnieuw",
+        "error": "Er is iets mis gegaan, probeer opnieuw later",
         "noEvents": "Geen evenementen gevonden"
     }
 }

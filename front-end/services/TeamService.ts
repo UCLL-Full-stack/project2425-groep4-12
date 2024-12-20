@@ -12,18 +12,8 @@ const getAllTeams = () => {
     });
 };
 
-const getTeamById = (teamId: (string)) => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + `/teams/${teamId}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        }
-    })
-};
-
 const TeamService = {
     getAllTeams,
-    getTeamById,
 };
 
 export default TeamService;

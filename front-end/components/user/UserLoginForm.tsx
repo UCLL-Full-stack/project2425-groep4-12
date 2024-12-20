@@ -45,30 +45,37 @@ const UserLoginForm: React.FC = () => {
             const response = await UserService.loginUser({ firstName, lastName, password });
             const data = await response.json();
 
-            localStorage.setItem(
-                "loggedInUser",
-                JSON.stringify({
-                    token: data.token,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    role: data.role,
-                })
-            );
+            if (response.status === 200) {
+                localStorage.setItem(
+                    "loggedInUser",
+                    JSON.stringify({
+                        token: data.token,
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        role: data.role,
+                    })
+                );
 
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("firstName", data.firstName);
-            localStorage.setItem("lastName", data.lastName);
-            localStorage.setItem("role", data.role);
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("firstName", data.firstName);
+                localStorage.setItem("lastName", data.lastName);
+                localStorage.setItem("role", data.role);
 
-            setTimeout(() => {
-                router.push("/");
-            }, 1000);
+                setStatusMessages([{ type: "success", message: `${t("login.success")}`}])
+
+                setTimeout(() => {
+                    router.push("/");
+                }, 1000);
+
+            } else {
+                setStatusMessages([{ type: "error", message: `${t("login.incorrect")}`}])
+            }
 
         } catch (error) {
             if (error instanceof Error) {
                 setStatusMessages([{ type: "error", message: error.message }]);
             } else {
-                setStatusMessages([{ type: "error", message: "An unknown error occurred" }]);
+                setStatusMessages([{ type: "error", message: `${t("login.error")}` }]);
             }
             console.error("Error:", error);
         }
@@ -110,7 +117,7 @@ const UserLoginForm: React.FC = () => {
                 <label htmlFor="passwordInput" className={styles.label}>
                     {t("login.password")}
                 </label>
-                <div className={styles.pad}>
+                <div className="p-2">
                     <input
                         id="passwordInput"
                         type="text"
